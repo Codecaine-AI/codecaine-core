@@ -1,0 +1,7 @@
+[install]
+# Bun 1.3 defaults new workspaces to the isolated linker, which gives every
+# member its own symlink node_modules and leaves the root without hoisted
+# packages. The repo-root scripts (docs-system/canvas/sequence/agent-kernel
+# roots are NOT workspace members) resolve dependencies by walking up to
+# Core/node_modules, so the classic hoisted layout is required.
+linker = "hoisted"

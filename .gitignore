@@ -1,0 +1,9 @@
+# Member repos — each is its own git repository.
+/annotations/
+/prompt-kit/
+/canvas/
+/sequence/
+/agent-kernel/
+/docs-system/
+/observatory/
+node_modules/
