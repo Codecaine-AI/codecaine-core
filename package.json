@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": [
     "annotations",
-    "prompt-kit",
+    "prompt-kit/packages/*",
     "canvas/packages/*",
     "sequence/packages/*",
     "agent-kernel/packages/*",
@@ -13,6 +13,6 @@
   "scripts": {
     "doctor": "bun scripts/doctor.ts",
     "doctor:fix": "bun scripts/doctor.ts --fix",
-    "test:all": "(cd annotations && bun test) && (cd prompt-kit && bun test) && (cd docs-system && bun run test) && (cd sequence && bun test) && (cd canvas && bun test) && (cd agent-kernel && bun run test)"
+    "test:all": "(cd annotations && bun test) && (cd prompt-kit && bun run test) && (cd docs-system && bun run test) && (cd sequence && bun test) && (cd canvas && bun test) && (cd agent-kernel && bun run test)"
   }
 }

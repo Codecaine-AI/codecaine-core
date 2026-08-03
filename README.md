@@ -57,8 +57,9 @@ structured long enough to compose, inspect, rewrite, and render predictably.
 
 [`agent-kernel`](https://github.com/Codecaine-AI/agent-kernel) runs agents. It
 owns runtime context, tool binding, spawning and subagent orchestration,
-concurrency, durable traces, and trace viewers. It consumes `prompt-kit` as a
-pinned Git dependency. `prompt-kit` does not depend on the kernel.
+concurrency, durable traces, and trace viewers. Its packages consume the
+`@codecaine-ai/prompt-kit` library as a Core workspace member. The Prompt Kit
+library package does not depend on the kernel.
 
 The other three peers are document surfaces:
 
@@ -137,8 +138,10 @@ keeps its workflow and product policy.
 
 ## Development
 
-This checkout is a bun meta-workspace: `bun install` at this root wires every
-cross-repo dependency to live source, and `bun run doctor` verifies the wiring.
+This checkout is a bun meta-workspace across annotations, prompt-kit (itself a
+nested workspace), canvas, sequence, agent-kernel, and docs-system: `bun install`
+at this root wires every cross-repo dependency to live source, and
+`bun run doctor` verifies the wiring.
 [`DEVELOPMENT.md`](./DEVELOPMENT.md) covers the topology, setup, daily flow,
 and the doctor's checks.
 

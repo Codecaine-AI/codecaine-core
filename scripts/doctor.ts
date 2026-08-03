@@ -15,7 +15,7 @@
  * do not fail the run.
  */
 
-import { existsSync, lstatSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, rmSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 const CORE = resolve(import.meta.dir, "..");
@@ -260,6 +260,26 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
     ]);
   } else {
     report("ok", `Workspace symlinks: all ${members.length} members symlinked in Core/node_modules`);
+  }
+}
+
+{
+  const link = join(CORE, "observatory", "node_modules", "@codecaine-ai", "prompt-kit");
+  if (isSymlink(link)) {
+    try {
+      const real = realpathSync(link);
+      const expectedSuffix = join("prompt-kit", "packages", "prompt-kit");
+      if (!real.endsWith(expectedSuffix)) {
+        report("fail", "Observatory prompt-kit symlink: points to the wrong package", [
+          `resolves to: ${real}`,
+          `expected path suffix: ${expectedSuffix}`,
+        ]);
+      } else {
+        report("ok", "Observatory prompt-kit symlink: points to prompt-kit/packages/prompt-kit");
+      }
+    } catch {
+      report("fail", "Observatory prompt-kit symlink: dangling or unreadable", [`link: ${link}`]);
+    }
   }
 }
 

@@ -120,6 +120,8 @@
         "tokenx": "^1.3.0",
       },
       "devDependencies": {
+        "@agent-kernel/db": "workspace:*",
+        "@agent-kernel/kernel": "workspace:*",
         "@types/bun": "latest",
         "@types/react": "^19",
         "@types/react-dom": "^19",
@@ -366,7 +368,7 @@
       "name": "@codecaine-ai/docs-framework-skill",
       "version": "0.0.1",
     },
-    "prompt-kit": {
+    "prompt-kit/packages/prompt-kit": {
       "name": "@codecaine-ai/prompt-kit",
       "version": "0.1.0",
       "dependencies": {
@@ -395,6 +397,20 @@
         "react",
         "react-dom",
       ],
+    },
+    "prompt-kit/packages/prompt-kit-agent": {
+      "name": "@codecaine-ai/prompt-kit-agent",
+      "version": "0.1.0",
+      "dependencies": {
+        "@agent-kernel/db": "workspace:*",
+        "@agent-kernel/kernel": "workspace:*",
+        "drizzle-orm": "^0.45.0",
+        "elysia": "^1.2.0",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+        "typescript": "^5",
+      },
     },
     "sequence/packages/sequence": {
       "name": "@codecaine-ai/sequence",
@@ -564,7 +580,9 @@
 
     "@codecaine-ai/docs-workbench": ["@codecaine-ai/docs-workbench@workspace:docs-system/packages/docs-workbench"],
 
-    "@codecaine-ai/prompt-kit": ["@codecaine-ai/prompt-kit@workspace:prompt-kit"],
+    "@codecaine-ai/prompt-kit": ["@codecaine-ai/prompt-kit@workspace:prompt-kit/packages/prompt-kit"],
+
+    "@codecaine-ai/prompt-kit-agent": ["@codecaine-ai/prompt-kit-agent@workspace:prompt-kit/packages/prompt-kit-agent"],
 
     "@codecaine-ai/sequence": ["@codecaine-ai/sequence@workspace:sequence/packages/sequence"],
 

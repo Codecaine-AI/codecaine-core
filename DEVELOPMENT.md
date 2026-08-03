@@ -4,7 +4,7 @@ How to develop across the Codecaine peer repos from this umbrella checkout. Core
 
 ## Topology
 
-- `Core/package.json` is a private workspace (`codecaine-core`) with 21 members via the globs `annotations`, `prompt-kit`, `canvas/packages/*`, `sequence/packages/*`, `agent-kernel/packages/*`, `agent-kernel/examples/*`, `docs-system/packages/*`.
+- `Core/package.json` is a private workspace (`codecaine-core`) with 22 members via the globs `annotations`, `prompt-kit/packages/*`, `canvas/packages/*`, `sequence/packages/*`, `agent-kernel/packages/*`, `agent-kernel/examples/*`, `docs-system/packages/*`.
 - Cross-repo dependencies are `workspace:*`. Every member resolves every other member as a symlink to live source through `Core/node_modules`.
 - `Core/bunfig.toml` pins `[install] linker = "hoisted"`.
   - Bun 1.3 defaults to the isolated linker, which leaves the root without hoisted packages.
