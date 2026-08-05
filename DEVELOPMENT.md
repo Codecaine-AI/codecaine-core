@@ -15,12 +15,16 @@ How to develop across the Codecaine peer repos from this umbrella checkout. Core
   - `observatory/` is untouched and uses global links.
   - `docs-system/external/*`, `docs-system/reference/*`, `canvas/tools/docs-framework`, and `canvas/packages/eval-suite/runner` are excluded from the workspace globs and every doctor scan; they exist for standalone use and collide with member names by design.
 
-## Fresh-Machine Setup
+## Fresh machine
 
-1. Clone the peer repos as siblings inside `Core/` (`annotations`, `prompt-kit`, `canvas`, `sequence`, `agent-kernel`, `docs-system`).
-2. Run `bun install` at the Core root.
+Clone Core, then let the bootstrap script clone every member repo and install the root workspace. Run the doctor afterward to verify the workspace invariants.
 
-Nothing else. No `bun link`, no per-repo installs. The root install creates every workspace symlink and hoists shared dependencies.
+```sh
+git clone https://github.com/Codecaine-AI/codecaine-core.git
+cd codecaine-core
+bun run bootstrap
+bun run doctor
+```
 
 ## Daily Flow
 

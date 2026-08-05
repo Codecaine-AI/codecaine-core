@@ -202,6 +202,27 @@ console.log(`Core workspace doctor — ${CORE}`);
 console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
 
 // ---------------------------------------------------------------------------
+// Member repos
+
+{
+  const manifest = join(CORE, "members.json");
+  if (!existsSync(manifest)) {
+    report("fail", "Member repos: members.json missing", ["FIX: bun run bootstrap"]);
+  } else {
+    const repos: { dir: string }[] = readJson(manifest);
+    const missing = repos.filter((repo) => !existsSync(join(CORE, repo.dir, ".git")));
+    if (missing.length) {
+      report("fail", "Member repos: repositories missing", [
+        ...missing.map((repo) => `missing: ${repo.dir}`),
+        "FIX: bun run bootstrap",
+      ]);
+    } else {
+      report("ok", `Member repos: ${repos.length} present`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 1. Install freshness
 
 {

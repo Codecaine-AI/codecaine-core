@@ -1,0 +1,9 @@
+[
+  { "dir": "annotations", "remote": "https://github.com/Codecaine-AI/annotations.git" },
+  { "dir": "prompt-kit", "remote": "https://github.com/Codecaine-AI/prompt-kit.git" },
+  { "dir": "canvas", "remote": "https://github.com/Codecaine-AI/canvas.git" },
+  { "dir": "sequence", "remote": "https://github.com/Codecaine-AI/sequence.git" },
+  { "dir": "agent-kernel", "remote": "https://github.com/Codecaine-AI/agent-kernel.git" },
+  { "dir": "docs-system", "remote": "https://github.com/Codecaine-AI/docs-system.git" },
+  { "dir": "observatory", "remote": "https://github.com/Codecaine-AI/observatory.git" }
+]
