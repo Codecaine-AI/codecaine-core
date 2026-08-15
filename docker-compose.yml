@@ -51,15 +51,17 @@ services:
   # Lands once the gamecube-decomp-harness migration finishes.
   # decomp-harness:
   #   image: codecaine-core-dev
-  #   working_dir: /decomp-harness
+  #   working_dir: /gamecube-decomp-harness
   #   init: true
   #   # Peer repo mounted separately, outside the Core workspace mount.
   #   volumes:
-  #     - ../gamecube-decomp-harness:/decomp-harness
+  #     - ../gamecube-decomp-harness:/gamecube-decomp-harness
   #     - bun-cache:/bun-cache
-  #   # command: TBD
+  #   # command: make docs  # docs kernel: 4840
   #   ports:
-  #     - "127.0.0.1:4870:4870"
+  #     - "127.0.0.1:4800:4800" # docs UI
+  #     - "127.0.0.1:4801:4801" # docs API
+  #     - "127.0.0.1:4840:4840" # docs kernel
 
 volumes:
   bun-cache:
