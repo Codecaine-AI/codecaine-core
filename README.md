@@ -79,6 +79,8 @@ trace database read-only and proxies prompt and catalog operations to running
 harnesses. No harness depends on it. Observatory is omitted from the diagram
 because it observes the system rather than participating in it.
 
+The shared annotate-agent UX is indexed in [docs/annotate-agent-ux.md](docs/annotate-agent-ux.md).
+
 The kernel wires agents to these surfaces. Agent definitions and rendered
 prompts come from `prompt-kit`. The kernel supplies execution, tools, spawning,
 and observability. Surface adapters let agents inspect and mutate typed
@@ -144,6 +146,8 @@ at this root wires every cross-repo dependency to live source, and
 `bun run doctor` verifies the wiring.
 [`DEVELOPMENT.md`](./DEVELOPMENT.md) covers the topology, setup, daily flow,
 and the doctor's checks.
+A docker-compose development runtime is available through `make docker-up`; see
+its Containers section for services and ports.
 
 ## Running Observatory
 

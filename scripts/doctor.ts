@@ -223,6 +223,45 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
 }
 
 // ---------------------------------------------------------------------------
+// Observatory registry
+//
+// The observatory discovers kernels via its machine-local registry.json.
+// Warn (never fail — the registry is per-machine and hand-curated) when a
+// member repo carries a kernel manifest that the registry does not know
+// about, or when a registry entry drifts from its manifest. The discovery
+// and comparison logic lives in the observatory's own sync script; this
+// check just shells out to it.
+
+{
+  const script = join(CORE, "observatory", "scripts", "sync-registry.ts");
+  const registryFile = join(CORE, "observatory", "registry.json");
+  if (existsSync(script)) {
+    if (!existsSync(registryFile)) {
+      report("info", "Observatory registry: no machine-local registry.json yet", [
+        "FIX: cp observatory/registry.example.json observatory/registry.json",
+      ]);
+    } else {
+      const run = Bun.spawnSync(["bun", script, "--check"], { cwd: join(CORE, "observatory") });
+      if (run.exitCode !== 0) {
+        const details = `${run.stdout}${run.stderr}`
+          .split("\n")
+          .filter(
+            (line) =>
+              line.startsWith("✗") || line.startsWith("⚠") || line.startsWith("    "),
+          )
+          .map((line) => line.trimEnd());
+        report("warn", "Observatory registry: member kernels unregistered or drifted", [
+          ...details,
+          "FIX: (cd observatory && bun run registry:sync)  # adds missing; never overwrites",
+        ]);
+      } else {
+        report("ok", "Observatory registry: member kernels registered, no drift");
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 1. Install freshness
 
 {

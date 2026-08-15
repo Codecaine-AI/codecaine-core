@@ -33,6 +33,36 @@ bun run doctor
 - After changing any `package.json`: `bun install` at Core root, then `bun run doctor`.
 - When a dependency behaves stale: `bun run doctor` first, code second.
 
+## Containers
+
+Containers mount the working tree instead of baking it into an image. There are no releases yet: the image pins bun 1.3.10 and OS dependencies only, then runs `bun install` against the mounted Core root at container start.
+
+Run one service:
+
+```sh
+docker compose up docs-kernel
+```
+
+Run every service, or stop the runtime:
+
+```sh
+docker compose up
+make docker-up
+make docker-down
+```
+
+The `bun-cache` named volume keeps repeated installs fast. Overlay `node_modules` volumes keep Linux-native installs out of the host checkout while all source stays mounted live.
+
+| Service | Ports |
+|---|---|
+| observatory | 4890 API, 4891 UI |
+| prompt-kit-kernel | 4850 |
+| core-harness | 4860 |
+| docs-kernel | 4840 |
+| docs-web | 4803 |
+
+This is interim infrastructure until member repos cut releases; then images can pin published versions.
+
 ## Adding a New App
 
 For any new vite app inside a member repo:

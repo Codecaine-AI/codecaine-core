@@ -1,0 +1,67 @@
+# Development packages change rapidly and have no releases yet. Services run the
+# current bind-mounted working tree; the image pins only the runtime and deps.
+x-dev-service: &dev-service
+  build: .
+  image: codecaine-core-dev
+  working_dir: /workspace
+  init: true
+  volumes:
+    - .:/workspace
+    # Share Bun downloads so repeated root installs start quickly.
+    - bun-cache:/bun-cache
+    # Keep Linux-native installs from clobbering host macOS node_modules while
+    # all source remains mounted live.
+    - core-node-modules:/workspace/node_modules
+    - observatory-node-modules:/workspace/observatory/node_modules
+
+services:
+  observatory:
+    <<: *dev-service
+    command: make observatory
+    ports:
+      - "127.0.0.1:4890:4890"
+      - "127.0.0.1:4891:4891"
+
+  docs-kernel:
+    <<: *dev-service
+    command: bun run --cwd docs-system docs-kernel
+    ports:
+      - "127.0.0.1:4840:4840"
+
+  core-harness:
+    <<: *dev-service
+    command: bun run --cwd agent-kernel core-harness
+    ports:
+      - "127.0.0.1:4860:4860"
+
+  prompt-kit-kernel:
+    <<: *dev-service
+    command: bun run --cwd prompt-kit dev:agent
+    ports:
+      - "127.0.0.1:4850:4850"
+
+  # Vite servers (observatory and docs-web) must bind 0.0.0.0 inside the
+  # container; add --host/0.0.0.0 in the member repo if a mapped port is silent.
+  docs-web:
+    <<: *dev-service
+    command: make -C docs-system dev-web
+    ports:
+      - "127.0.0.1:4803:4803"
+
+  # Lands once the gamecube-decomp-harness migration finishes.
+  # decomp-harness:
+  #   image: codecaine-core-dev
+  #   working_dir: /decomp-harness
+  #   init: true
+  #   # Peer repo mounted separately, outside the Core workspace mount.
+  #   volumes:
+  #     - ../gamecube-decomp-harness:/decomp-harness
+  #     - bun-cache:/bun-cache
+  #   # command: TBD
+  #   ports:
+  #     - "127.0.0.1:4870:4870"
+
+volumes:
+  bun-cache:
+  core-node-modules:
+  observatory-node-modules:

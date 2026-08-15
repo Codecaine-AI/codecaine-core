@@ -1,0 +1,15 @@
+# The Dockerfile copies nothing: exclude all build context to keep builds tiny.
+*
+
+# Explicitly document the large generated paths that must never enter context.
+**/node_modules
+**/.git
+reference/
+**/reference/
+**/.vite
+**/.bun
+**/.cache
+**/bun-cache
+**/dist
+**/build
+*.log

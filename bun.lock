@@ -35,6 +35,20 @@
         "typescript": "^5",
       },
     },
+    "agent-kernel/packages/core-harness": {
+      "name": "@agent-kernel/core-harness",
+      "version": "0.1.0",
+      "dependencies": {
+        "@agent-kernel/db": "workspace:*",
+        "@agent-kernel/kernel": "workspace:*",
+        "drizzle-orm": "^0.45.0",
+        "elysia": "^1.2.0",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+        "typescript": "^5",
+      },
+    },
     "agent-kernel/packages/db": {
       "name": "@agent-kernel/db",
       "version": "0.1.0",
@@ -70,6 +84,18 @@
     "agent-kernel/packages/protocol": {
       "name": "@agent-kernel/protocol",
       "version": "0.1.0",
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+    },
+    "agent-kernel/packages/tui": {
+      "name": "@agent-kernel/tui",
+      "version": "0.1.0",
+      "dependencies": {
+        "@agent-kernel/kernel": "workspace:*",
+        "@earendil-works/pi-coding-agent": "^0.82.1",
+        "@earendil-works/pi-tui": "^0.82.1",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -265,6 +291,22 @@
         "typescript": "^5",
       },
     },
+    "docs-system/packages/docs-kernel": {
+      "name": "@codecaine-ai/docs-kernel",
+      "version": "0.1.0",
+      "dependencies": {
+        "@agent-kernel/db": "workspace:*",
+        "@agent-kernel/kernel": "workspace:*",
+        "@codecaine-ai/docs-model": "workspace:*",
+        "@codecaine-ai/docs-server": "workspace:*",
+        "drizzle-orm": "^0.45.0",
+        "elysia": "^1.2.0",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+        "typescript": "^5",
+      },
+    },
     "docs-system/packages/docs-model": {
       "name": "@codecaine-ai/docs-model",
       "version": "0.1.0",
@@ -452,6 +494,8 @@
     },
   },
   "packages": {
+    "@agent-kernel/core-harness": ["@agent-kernel/core-harness@workspace:agent-kernel/packages/core-harness"],
+
     "@agent-kernel/db": ["@agent-kernel/db@workspace:agent-kernel/packages/db"],
 
     "@agent-kernel/example-simple-research-kernel": ["@agent-kernel/example-simple-research-kernel@workspace:agent-kernel/examples/simple-research-kernel"],
@@ -459,6 +503,8 @@
     "@agent-kernel/kernel": ["@agent-kernel/kernel@workspace:agent-kernel/packages/kernel"],
 
     "@agent-kernel/protocol": ["@agent-kernel/protocol@workspace:agent-kernel/packages/protocol"],
+
+    "@agent-kernel/tui": ["@agent-kernel/tui@workspace:agent-kernel/packages/tui"],
 
     "@agent-kernel/viewer-core": ["@agent-kernel/viewer-core@workspace:agent-kernel/packages/viewer-core"],
 
@@ -571,6 +617,8 @@
     "@codecaine-ai/docs-framework-skill": ["@codecaine-ai/docs-framework-skill@workspace:docs-system/packages/framework"],
 
     "@codecaine-ai/docs-index": ["@codecaine-ai/docs-index@workspace:docs-system/packages/docs-index"],
+
+    "@codecaine-ai/docs-kernel": ["@codecaine-ai/docs-kernel@workspace:docs-system/packages/docs-kernel"],
 
     "@codecaine-ai/docs-model": ["@codecaine-ai/docs-model@workspace:docs-system/packages/docs-model"],
 
