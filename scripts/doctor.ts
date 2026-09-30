@@ -323,6 +323,47 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
   }
 }
 
+// A standalone install can leave member-local symlinks pointing at vendored
+// copies. Those shadow the healthy root links, so check from each consumer too.
+{
+  const wrong: string[] = [];
+  let checked = 0;
+  const consumers = [
+    ...members,
+    ...[...REPOS, "observatory"].flatMap((dir) => {
+      const file = join(CORE, dir, "package.json");
+      return existsSync(file) ? [{ dir, name: dir, manifest: readJson(file) }] : [];
+    }),
+  ];
+  for (const consumer of consumers) {
+    const deps = new Set(
+      ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]
+        .flatMap((section) => Object.keys(consumer.manifest[section] ?? {})),
+    );
+    for (const dep of deps) {
+      const member = memberByName.get(dep);
+      if (!member) continue;
+      checked++;
+      let dir = join(CORE, consumer.dir);
+      let actual: string | undefined;
+      while (true) {
+        const candidate = join(dir, "node_modules", dep);
+        if (existsSync(candidate) || isSymlink(candidate)) {
+          try { actual = realpathSync(candidate); } catch { /* dangling */ }
+          break;
+        }
+        if (dir === CORE || dirname(dir) === dir) break;
+        dir = dirname(dir);
+      }
+      const expected = realpathSync(join(CORE, member.dir));
+      if (actual !== expected) {
+        wrong.push(`${consumer.dir}: ${dep} resolves to ${actual ?? "missing/dangling"}; expected ${expected}`);
+      }
+    }
+  }
+  report(wrong.length ? "fail" : "ok", `Consumer workspace resolution: ${checked} local dependency edges checked`, wrong);
+}
+
 {
   const link = join(CORE, "observatory", "node_modules", "@codecaine-ai", "prompt-kit");
   if (isSymlink(link)) {
