@@ -99,6 +99,7 @@ Each repo remains a standalone git repo with its own lockfile and workflow, but 
 | 6 | Shadowing node_modules | Real copies of member packages nested under a member, shadowing live source (⚠, `--fix` removes). Bun's hoisted version-conflict splits (nested `vite`, `tailwindcss`, …) are normal and pass. |
 | 7 | Rogue dep protocols | `link:` or Codecaine git-pinned cross-repo deps outside the sanctioned exceptions (✗, convert to `workspace:*`) |
 | 8 | Lockfile drift | Per-repo lockfiles newer than `Core/bun.lock` (ℹ only) |
+| 9 | Design-system lint | A Core app in `../../design-system/apps.json` that fails `bun run lint:apps` (⚠ only, prints the failing checks and the command that lists every violation; one ⚠ when the design-system or `lint:apps` is missing) |
 
 ## Why This Exists
 

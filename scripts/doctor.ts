@@ -5,7 +5,8 @@
  * Verifies the health of the Codecaine Core bun meta-workspace: install
  * freshness, workspace symlinks, single hoisted React, vite prebundle
  * hazards, stale .vite caches, shadowing node_modules, rogue dependency
- * protocols, and per-repo lockfile drift.
+ * protocols, per-repo lockfile drift, and the design-system lint of Core's
+ * apps.
  *
  * Usage:
  *   bun scripts/doctor.ts          # report only
@@ -614,6 +615,78 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
     ]);
   } else {
     report("ok", "Lockfile drift: no per-repo lockfile is newer than Core/bun.lock");
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 9. Design-system lint (warn-only)
+//
+// The design-system's apps.json registers every app that uses its tokens, and
+// `bun run lint:apps` proves each one is wired and conformant. Run it for the
+// registry apps inside Core (repo under codecaine/core/, minus IGNORES). Warn,
+// never fail: the apps move onto the design system one pass at a time.
+
+{
+  const dir = resolve(CORE, "../../design-system");
+  const workspace = resolve(CORE, "../..");
+  const prefix = "codecaine/core/";
+  const command = (ids: string[]) => `(cd "${dir}" && bun run lint:apps --root "${workspace}" ${ids.join(" ")})`;
+  let apps: { id: string; repo: string; root?: string }[] | undefined;
+  let problem = "../../design-system/package.json missing or unreadable";
+  try {
+    if (readJson(join(dir, "package.json")).scripts?.["lint:apps"]) {
+      problem = "../../design-system/apps.json missing or unreadable";
+      apps = readJson(join(dir, "apps.json")).apps;
+    } else {
+      problem = "../../design-system has no lint:apps script";
+    }
+  } catch {
+    // missing or unreadable: reported below
+  }
+  if (!Array.isArray(apps)) {
+    report("warn", `Design-system lint: ${problem}; apps not checked`, [`design-system: ${dir}`]);
+  } else {
+    const core = apps.filter((app) => app.repo.startsWith(prefix));
+    const skipped = core.filter((app) => isIgnored((app.root ?? app.repo).slice(prefix.length)));
+    const ids = core.filter((app) => !skipped.includes(app)).map((app) => app.id);
+    if (skipped.length) {
+      report("info", `Design-system lint: skipped ${skipped.map((app) => app.id).join(", ")} (IGNORES)`);
+    }
+    if (!ids.length) {
+      report("info", `Design-system lint: no registry app under ${prefix}`);
+    } else {
+      const run = Bun.spawnSync(["bun", "run", "lint:apps", "--json", "--root", workspace, ...ids], { cwd: dir });
+      let result: { apps: { id: string; ok: boolean; checks: { id: string; status: string; violations: unknown[] }[] }[] } | undefined;
+      try {
+        const parsed = run.exitCode === 0 || run.exitCode === 1 ? JSON.parse(run.stdout.toString()) : undefined;
+        if (Array.isArray(parsed?.apps)) result = parsed;
+      } catch {
+        // no report: reported below
+      }
+      if (!result) {
+        const details = `${run.stderr}`
+          .split("\n")
+          .map((line) => line.trimEnd())
+          .filter((line) => line && !line.startsWith("$ "));
+        report("warn", `Design-system lint: lint:apps exited ${run.exitCode} without a report; apps not checked`, [
+          ...details,
+          `run: ${command(ids)}`,
+        ]);
+      } else {
+        for (const app of result.apps) {
+          if (app.ok) {
+            report("ok", `Design-system lint: ${app.id} passes`);
+            continue;
+          }
+          const failing = (app.checks ?? [])
+            .filter((check) => check.status === "fail")
+            .map((check) => `${check.id} (${check.violations?.length ?? 0})`);
+          report("warn", `Design-system lint: ${app.id} fails ${failing.join(", ")}`, [
+            `every violation: ${command([app.id])}`,
+          ]);
+        }
+      }
+    }
   }
 }
 
