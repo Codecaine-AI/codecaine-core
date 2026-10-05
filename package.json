@@ -8,7 +8,8 @@
     "sequence/packages/*",
     "agent-kernel/packages/*",
     "agent-kernel/examples/*",
-    "docs-system/packages/*"
+    "docs-system/packages/*",
+    "../../design-system"
   ],
   "scripts": {
     "bootstrap": "bun scripts/bootstrap.ts",

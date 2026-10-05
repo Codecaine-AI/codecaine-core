@@ -5,6 +5,10 @@
     "": {
       "name": "codecaine-core",
     },
+    "../../design-system": {
+      "name": "@codecaine-ai/design-system",
+      "version": "0.1.0",
+    },
     "agent-kernel/examples/simple-research-kernel": {
       "name": "@agent-kernel/example-simple-research-kernel",
       "version": "0.0.2",
@@ -384,7 +388,7 @@
     },
     "docs-system/packages/docs-publish": {
       "name": "@codecaine-ai/docs-publish",
-      "version": "0.1.0-proof.13",
+      "version": "0.1.0-proof.20",
     },
     "docs-system/packages/docs-server": {
       "name": "@codecaine-ai/docs-server",
@@ -462,6 +466,7 @@
       "dependencies": {
         "@codecaine-ai/annotations": "workspace:*",
         "@codecaine-ai/canvas": "workspace:*",
+        "@codecaine-ai/design-system": "workspace:*",
         "@codecaine-ai/docs-index": "workspace:*",
         "@codecaine-ai/docs-model": "workspace:*",
         "@codecaine-ai/docs-server": "workspace:*",
@@ -750,6 +755,8 @@
     "@codecaine-ai/canvas-agent": ["@codecaine-ai/canvas-agent@workspace:canvas/packages/canvas-agent"],
 
     "@codecaine-ai/canvas-mcp": ["@codecaine-ai/canvas-mcp@workspace:canvas/packages/canvas-mcp"],
+
+    "@codecaine-ai/design-system": ["@codecaine-ai/design-system@workspace:../../design-system"],
 
     "@codecaine-ai/docs-cli": ["@codecaine-ai/docs-cli@workspace:docs-system/packages/docs-cli"],
 

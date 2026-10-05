@@ -55,7 +55,23 @@ for (const clone of clones) {
   else report("fail", `${clone.member.dir}: clone failed`, output);
 }
 
-if (missing.length > 0 || !existsSync(join(CORE, "node_modules"))) {
+// @codecaine-ai/design-system sits beside the workspace (package.json workspaces
+// lists ../../design-system). It has no git remote yet, so it cannot be cloned
+// here, and bun install stops with "Workspace not found" without it.
+const designSystem = resolve(CORE, "../../design-system");
+const hasDesignSystem = existsSync(join(designSystem, "package.json"));
+if (hasDesignSystem) {
+  report("ok", "design-system: present at ../../design-system");
+} else {
+  report("fail", "design-system: missing at ../../design-system", [
+    `expected: ${designSystem}`,
+    "No git remote yet, so bootstrap cannot clone it. Copy or clone the design-system folder to that path, then rerun: bun run bootstrap",
+  ]);
+}
+
+if (!hasDesignSystem) {
+  report("fail", "Root install skipped: bun install needs ../../design-system (see above)");
+} else if (missing.length > 0 || !existsSync(join(CORE, "node_modules"))) {
   const proc = Bun.spawn(["bun", "install"], { cwd: CORE, stdout: "inherit", stderr: "inherit" });
   const exitCode = await proc.exited;
   if (exitCode === 0) report("ok", "Root install complete");

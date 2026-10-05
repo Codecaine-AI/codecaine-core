@@ -13,6 +13,10 @@ x-dev-service: &dev-service
     # all source remains mounted live.
     - core-node-modules:/workspace/node_modules
     - observatory-node-modules:/workspace/observatory/node_modules
+    # @codecaine-ai/design-system: the workspace entry "../../design-system"
+    # resolves to /design-system from /workspace. Read-only: the package has no
+    # dependencies and ships its built dist/, so it needs no install or build.
+    - ../../design-system:/design-system:ro
 
 services:
   observatory:

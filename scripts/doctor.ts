@@ -223,6 +223,39 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
 }
 
 // ---------------------------------------------------------------------------
+// Design system
+//
+// @codecaine-ai/design-system (tokens and layout CSS for every app) sits beside
+// the workspace: package.json workspaces lists ../../design-system. It has no
+// git remote yet, so bootstrap cannot clone it, and without the folder
+// `bun install` stops with "Workspace not found". Its dist/ is committed and
+// must match its tokens/: `scripts/build.ts --check` exits 1 when it is stale.
+
+{
+  const dir = resolve(CORE, "../../design-system");
+  if (!existsSync(join(dir, "package.json"))) {
+    report("fail", "Design system: ../../design-system/package.json missing", [
+      `expected: ${dir}`,
+      "FIX: copy or clone the design-system folder to that path (no git remote yet, so bootstrap cannot clone it), then bun install",
+    ]);
+  } else {
+    const run = Bun.spawnSync(["bun", join(dir, "scripts", "build.ts"), "--check"], { cwd: dir });
+    if (run.exitCode !== 0) {
+      const details = `${run.stdout}${run.stderr}`
+        .split("\n")
+        .map((line) => line.trimEnd())
+        .filter(Boolean);
+      report("fail", "Design system: build outputs are stale or tokens are invalid", [
+        ...details,
+        `FIX: (cd "${dir}" && bun run build && bun run test)`,
+      ]);
+    } else {
+      report("ok", "Design system: ../../design-system present, dist/ matches tokens/");
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Observatory registry
 //
 // The observatory discovers kernels via its machine-local registry.json.
