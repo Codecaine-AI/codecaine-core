@@ -12,3 +12,7 @@ node_modules/
 # Local junk / reference material
 .DS_Store
 /reference/
+
+# Derived Codecaine docs state (rebuildable)
+docs/.index/
+docs/.changesets/
