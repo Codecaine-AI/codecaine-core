@@ -5,5 +5,6 @@
   { "dir": "sequence", "remote": "https://github.com/Codecaine-AI/sequence.git" },
   { "dir": "agent-kernel", "remote": "https://github.com/Codecaine-AI/agent-kernel.git" },
   { "dir": "docs-system", "remote": "https://github.com/Codecaine-AI/docs-system.git" },
-  { "dir": "observatory", "remote": "https://github.com/Codecaine-AI/observatory.git" }
+  { "dir": "observatory", "remote": "https://github.com/Codecaine-AI/observatory.git" },
+  { "dir": "design-system", "remote": "https://github.com/Codecaine-AI/design-system.git" }
 ]
