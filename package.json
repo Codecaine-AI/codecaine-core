@@ -9,7 +9,7 @@
     "agent-kernel/packages/*",
     "agent-kernel/examples/*",
     "docs-system/packages/*",
-    "../../design-system"
+    "design-system"
   ],
   "scripts": {
     "bootstrap": "bun scripts/bootstrap.ts",

@@ -38,7 +38,7 @@ const IGNORES = [
   "canvas/packages/eval-suite/runner",
 ];
 
-const REPOS = ["annotations", "prompt-kit", "canvas", "sequence", "agent-kernel", "docs-system"];
+const REPOS = ["annotations", "prompt-kit", "canvas", "sequence", "agent-kernel", "docs-system", "design-system"];
 
 /** Deliberate exceptions to the workspace:* rule. agent-kernel's repo root is
  * not a workspace member, so its devDep on prompt-kit stays a link:. */
@@ -226,18 +226,17 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
 // ---------------------------------------------------------------------------
 // Design system
 //
-// @codecaine-ai/design-system (tokens and layout CSS for every app) sits beside
-// the workspace: package.json workspaces lists ../../design-system. It has no
-// git remote yet, so bootstrap cannot clone it, and without the folder
-// `bun install` stops with "Workspace not found". Its dist/ is committed and
-// must match its tokens/: `scripts/build.ts --check` exits 1 when it is stale.
+// @codecaine-ai/design-system (tokens and layout CSS for every app) is a member
+// repo like the others: bootstrap clones it and the root workspace includes it.
+// Its dist/ is committed and must match its tokens/: `scripts/build.ts --check`
+// exits 1 when it is stale.
 
 {
-  const dir = resolve(CORE, "../../design-system");
+  const dir = join(CORE, "design-system");
   if (!existsSync(join(dir, "package.json"))) {
-    report("fail", "Design system: ../../design-system/package.json missing", [
+    report("fail", "Design system: design-system/package.json missing", [
       `expected: ${dir}`,
-      "FIX: copy or clone the design-system folder to that path (no git remote yet, so bootstrap cannot clone it), then bun install",
+      "FIX: bun run bootstrap",
     ]);
   } else {
     const run = Bun.spawnSync(["bun", join(dir, "scripts", "build.ts"), "--check"], { cwd: dir });
@@ -251,7 +250,7 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
         `FIX: (cd "${dir}" && bun run build && bun run test)`,
       ]);
     } else {
-      report("ok", "Design system: ../../design-system present, dist/ matches tokens/");
+      report("ok", "Design system: present, dist/ matches tokens/");
     }
   }
 }
@@ -627,18 +626,18 @@ console.log(`${members.length} workspace members${FIX ? " (--fix)" : ""}\n`);
 // never fail: the apps move onto the design system one pass at a time.
 
 {
-  const dir = resolve(CORE, "../../design-system");
+  const dir = join(CORE, "design-system");
   const workspace = resolve(CORE, "../..");
   const prefix = "codecaine/core/";
   const command = (ids: string[]) => `(cd "${dir}" && bun run lint:apps --root "${workspace}" ${ids.join(" ")})`;
   let apps: { id: string; repo: string; root?: string }[] | undefined;
-  let problem = "../../design-system/package.json missing or unreadable";
+  let problem = "design-system/package.json missing or unreadable";
   try {
     if (readJson(join(dir, "package.json")).scripts?.["lint:apps"]) {
-      problem = "../../design-system/apps.json missing or unreadable";
+      problem = "design-system/apps.json missing or unreadable";
       apps = readJson(join(dir, "apps.json")).apps;
     } else {
-      problem = "../../design-system has no lint:apps script";
+      problem = "design-system has no lint:apps script";
     }
   } catch {
     // missing or unreadable: reported below

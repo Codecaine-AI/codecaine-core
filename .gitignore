@@ -6,6 +6,7 @@
 /agent-kernel/
 /docs-system/
 /observatory/
+/design-system/
 node_modules/
 
 # Local junk / reference material

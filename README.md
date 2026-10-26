@@ -133,6 +133,7 @@ Each projection fits its medium:
 - [Codecaine-AI/canvas](https://github.com/Codecaine-AI/canvas)
 - [Codecaine-AI/docs-system](https://github.com/Codecaine-AI/docs-system)
 - [Codecaine-AI/sequence](https://github.com/Codecaine-AI/sequence)
+- [Codecaine-AI/design-system](https://github.com/Codecaine-AI/design-system)
 - observatory (local peer)
 
 Hosts clone or mount the peers they need and pin each independently. Each host
@@ -141,9 +142,9 @@ keeps its workflow and product policy.
 ## Development
 
 This checkout is a bun meta-workspace across annotations, prompt-kit (itself a
-nested workspace), canvas, sequence, agent-kernel, and docs-system: `bun install`
-at this root wires every cross-repo dependency to live source, and
-`bun run doctor` verifies the wiring.
+nested workspace), canvas, sequence, agent-kernel, docs-system, and
+design-system: `bun install` at this root wires every cross-repo dependency to
+live source, and `bun run doctor` verifies the wiring.
 [`DEVELOPMENT.md`](./DEVELOPMENT.md) covers the topology, setup, daily flow,
 and the doctor's checks.
 A docker-compose development runtime is available through `make docker-up`; see
