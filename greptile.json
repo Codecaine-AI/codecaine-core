@@ -1,0 +1,14 @@
+{
+  "strictness": 2,
+  "commentTypes": [
+    "logic",
+    "syntax"
+  ],
+  "triggerOnDrafts": false,
+  "autoReview": [
+    "open",
+    "push"
+  ],
+  "ignorePatterns": "**/dist/**\n**/dist-static/**\n**/build/**\n**/coverage/**\nbun.lock\n**/package-lock.json\n**/__snapshots__/**\n**/*.snap\n**/__fixtures__/**\n**/fixtures/**\n**/*.log",
+  "instructions": "Bun and TypeScript workspace root that ties the Codecaine member repos together; its own code is the bootstrap and doctor scripts under scripts/, and the member repos are cloned in, not committed. Focus on correctness, types, error handling and missing tests. Skip style nits."
+}
