@@ -7,7 +7,7 @@
     },
     "agent-kernel/examples/simple-research-kernel": {
       "name": "@codecaine-ai/agent-kernel-example-simple-research-kernel",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel": "workspace:*",
         "@codecaine-ai/agent-kernel-db": "workspace:*",
@@ -38,7 +38,7 @@
     },
     "agent-kernel/packages/core-harness": {
       "name": "@codecaine-ai/agent-kernel-core-harness",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel": "workspace:*",
         "@codecaine-ai/agent-kernel-db": "workspace:*",
@@ -52,7 +52,7 @@
     },
     "agent-kernel/packages/db": {
       "name": "@codecaine-ai/agent-kernel-db",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel-protocol": "workspace:*",
         "drizzle-orm": "^0.45.0",
@@ -63,7 +63,7 @@
     },
     "agent-kernel/packages/kernel": {
       "name": "@codecaine-ai/agent-kernel",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "bin": {
         "agent-kernel-doctor": "./src/doctor-cli.ts",
         "agent-kernel-render-prompts": "./src/render-prompts-cli.ts",
@@ -86,14 +86,14 @@
     },
     "agent-kernel/packages/protocol": {
       "name": "@codecaine-ai/agent-kernel-protocol",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "devDependencies": {
         "@types/bun": "latest",
       },
     },
     "agent-kernel/packages/tui": {
       "name": "@codecaine-ai/agent-kernel-tui",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel": "workspace:*",
         "@earendil-works/pi-coding-agent": "^1.0.4",
@@ -107,7 +107,7 @@
     },
     "agent-kernel/packages/viewer-core": {
       "name": "@codecaine-ai/agent-kernel-viewer-core",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel-protocol": "workspace:*",
         "@codecaine-ai/prompt-kit": "workspace:*",
@@ -120,23 +120,27 @@
     },
     "agent-kernel/packages/viewer-shell": {
       "name": "@codecaine-ai/agent-kernel-viewer-shell",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel-viewer-core": "workspace:*",
         "@codecaine-ai/agent-kernel-viewer-ui": "workspace:*",
         "@evilmartians/agent-prism-types": "^0.0.9",
-        "react": "19.2.3",
-        "react-dom": "19.2.3",
       },
       "devDependencies": {
         "@types/bun": "latest",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+      },
+      "peerDependencies": {
+        "react": "^19",
+        "react-dom": "^19",
       },
     },
     "agent-kernel/packages/viewer-ui": {
       "name": "@codecaine-ai/agent-kernel-viewer-ui",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "dependencies": {
         "@codecaine-ai/agent-kernel-protocol": "workspace:*",
         "@codecaine-ai/agent-kernel-viewer-core": "workspace:*",
@@ -146,8 +150,6 @@
         "@radix-ui/react-collapsible": "^1.1.12",
         "classnames": "^2.5.1",
         "lucide-react": "^0.563.0",
-        "react": "19.2.3",
-        "react-dom": "19.2.3",
         "tokenx": "^1.3.0",
       },
       "devDependencies": {
@@ -156,6 +158,12 @@
         "@types/bun": "latest",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+      },
+      "peerDependencies": {
+        "react": "^19",
+        "react-dom": "^19",
       },
     },
     "annotations": {
