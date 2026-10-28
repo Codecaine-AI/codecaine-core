@@ -513,8 +513,7 @@
               {
                 "insert": "annotations/",
                 "attributes": {
-                  "code": true,
-                  "link": "annotations/"
+                  "code": true
                 }
               }
             ],
@@ -536,8 +535,7 @@
               {
                 "insert": "prompt-kit/packages/prompt-kit/src/ui/lab/",
                 "attributes": {
-                  "code": true,
-                  "link": "prompt-kit/packages/prompt-kit/src/ui/lab/"
+                  "code": true
                 }
               }
             ],
@@ -562,8 +560,7 @@
               {
                 "insert": "docs-system/packages/docs-viewer/src/lab/",
                 "attributes": {
-                  "code": true,
-                  "link": "docs-system/packages/docs-viewer/src/lab/"
+                  "code": true
                 }
               }
             ],
@@ -575,8 +572,7 @@
               {
                 "insert": "docs-system/packages/docs-workbench/web/src/_components/DocPage/lab/",
                 "attributes": {
-                  "code": true,
-                  "link": "docs-system/packages/docs-workbench/web/src/_components/DocPage/lab/"
+                  "code": true
                 }
               }
             ],
@@ -588,8 +584,7 @@
               {
                 "insert": "prompt-kit/packages/prompt-kit-agent/",
                 "attributes": {
-                  "code": true,
-                  "link": "prompt-kit/packages/prompt-kit-agent/"
+                  "code": true
                 }
               }
             ],
@@ -620,8 +615,7 @@
               {
                 "insert": "docs-system/packages/docs-kernel/",
                 "attributes": {
-                  "code": true,
-                  "link": "docs-system/packages/docs-kernel/"
+                  "code": true
                 }
               }
             ],
@@ -652,8 +646,7 @@
               {
                 "insert": "observatory/registry.example.json",
                 "attributes": {
-                  "code": true,
-                  "link": "observatory/registry.example.json"
+                  "code": true
                 }
               }
             ],
