@@ -45,10 +45,17 @@ function writeJson(path: string, value: any, raw: string) {
   writeFileSync(path, JSON.stringify(value, null, indent) + "\n");
 }
 
+// Strict SemVer 2.0: no leading zeroes, no empty prerelease identifiers.
+const SEMVER =
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?$/;
+
 function workspaceMembers(): Member[] {
   const root = JSON.parse(readFileSync(join(CORE, "package.json"), "utf8"));
   const members: Member[] = [];
   for (const pattern of root.workspaces as string[]) {
+    // Member repos are separate clones. A missing one would silently drop its packages.
+    const repoDir = join(CORE, pattern.split("/")[0]);
+    if (!existsSync(repoDir)) fail(`${pattern.split("/")[0]} is missing. Run bun run bootstrap first.`);
     for (const file of new Glob(`${pattern}/package.json`).scanSync({ cwd: CORE, onlyFiles: true })) {
       const rel = file.slice(0, -"/package.json".length);
       const dir = join(CORE, rel);
@@ -106,10 +113,19 @@ function publishManifest(m: Member, versions: Map<string, string>): any {
   return manifest;
 }
 
+/** Reads one field of a published version. Undefined means npm has no such version. Any other error stops the release. */
 async function npmView(spec: string, field: string): Promise<any> {
-  const proc = Bun.spawn(["npm", "view", spec, field, "--json"], { stdout: "pipe", stderr: "ignore" });
-  const text = (await new Response(proc.stdout).text()).trim();
-  return text ? JSON.parse(text) : undefined;
+  const proc = Bun.spawn(["npm", "view", spec, field, "--json"], { stdout: "pipe", stderr: "pipe" });
+  const [text, errText, code] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+    proc.exited,
+  ]);
+  if (code !== 0) {
+    if (/E404/.test(errText + text)) return undefined;
+    fail(`npm view ${spec} failed:\n${errText.trim() || text.trim()}`);
+  }
+  return text.trim() ? JSON.parse(text) : undefined;
 }
 
 /** Published packages whose dependency ranges no longer accept a local version. Each one needs a bump. */
@@ -117,11 +133,13 @@ async function staleDependents(publicMembers: Member[], versions: Map<string, st
   const stale: string[] = [];
   for (const m of publicMembers) {
     if (!published.has(m.name)) continue;
-    const deps = (await npmView(`${m.name}@${m.manifest.version}`, "dependencies")) ?? {};
-    for (const [dep, range] of Object.entries<string>(deps)) {
-      const local = versions.get(dep);
-      if (local && !semver.satisfies(local, range)) {
-        stale.push(`${m.name}@${m.manifest.version} needs ${dep} ${range}, and ${dep} is ${local}. Bump ${m.repo}.`);
+    for (const field of RUNTIME_FIELDS) {
+      const deps = (await npmView(`${m.name}@${m.manifest.version}`, field)) ?? {};
+      for (const [dep, range] of Object.entries<string>(deps)) {
+        const local = versions.get(dep);
+        if (local && !semver.satisfies(local, range)) {
+          stale.push(`${m.name}@${m.manifest.version} needs ${dep} ${range}, and ${dep} is ${local}. Bump ${m.repo}.`);
+        }
       }
     }
   }
@@ -138,7 +156,7 @@ function bump(repo: string, to: string, members: Member[]) {
     : to === "minor" ? `${major}.${minor + 1}.0`
     : to === "patch" ? `${major}.${minor}.${patch + 1}`
     : to;
-  if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(next)) fail(`not a semver version or level: ${to}`);
+  if (!SEMVER.test(next)) fail(`not a semver version or level: ${to}`);
   // Every package in the repo shares the repo's version, plus the repo root manifest when it is not a member.
   const paths = inRepo.map((m) => join(m.dir, "package.json"));
   const rootManifest = join(CORE, repo, "package.json");
@@ -165,6 +183,8 @@ if (args[0] === "bump") {
 const allNames = new Set(members.map((m) => m.name));
 const publicMembers = dependencyOrder(members.filter((m) => m.manifest.private !== true), allNames);
 const versions = new Map(publicMembers.map((m) => [m.name, m.manifest.version as string]));
+if (!publicMembers.length) fail("no public packages found. Run bun run bootstrap, or check the private flags.");
+for (const m of publicMembers) if (!SEMVER.test(m.manifest.version)) fail(`${m.name} has an invalid version: ${m.manifest.version}`);
 
 const published = new Set<string>();
 for (const m of publicMembers) {
@@ -187,9 +207,14 @@ if (!toPublish.length) {
 
 /** Entry points (main, types, bin, exports) that the package's `files` list leaves out of the tarball. */
 async function missingEntryPoints(m: Member): Promise<string[]> {
-  const proc = Bun.spawn(["npm", "pack", "--dry-run", "--json"], { cwd: m.dir, stdout: "pipe", stderr: "ignore" });
+  const proc = Bun.spawn(["npm", "pack", "--dry-run", "--json"], { cwd: m.dir, stdout: "pipe", stderr: "pipe" });
+  const [out, errText, code] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+    proc.exited,
+  ]);
+  if (code !== 0) fail(`npm pack failed for ${m.name}:\n${errText.trim()}`);
   // A prepack script (design-system's build) prints to stdout before npm's JSON.
-  const out = await new Response(proc.stdout).text();
   const json = out.slice(out.search(/^\[/m));
   const packed: string[] = JSON.parse(json)[0].files.map((f: { path: string }) => f.path);
   const flat = (e: unknown): string[] =>
@@ -206,37 +231,44 @@ for (const m of toPublish) {
   if (missing.length) fail(`${m.name} exports files its "files" list leaves out: ${missing.join(", ")}`);
 }
 
-// npm ships a LICENSE only from the package folder. A package without its own
-// gets a copy of its repo's LICENSE for the publish.
-function licenseSource(m: Member): string | undefined {
-  if (existsSync(join(m.dir, "LICENSE"))) return undefined;
-  const repoLicense = join(CORE, m.repo, "LICENSE");
-  if (!existsSync(repoLicense)) fail(`${m.name} has no LICENSE, and neither does ${m.repo}. Add one before publishing.`);
-  return repoLicense;
+// npm ships a LICENSE and a README only from the package folder. A package
+// without its own gets a copy of its repo's file for the publish.
+function repoCopies(m: Member): string[] {
+  const copies: string[] = [];
+  for (const file of ["LICENSE", "README.md"]) {
+    if (existsSync(join(m.dir, file))) continue;
+    if (existsSync(join(CORE, m.repo, file))) copies.push(file);
+    else if (file === "LICENSE") fail(`${m.name} has no LICENSE, and neither does ${m.repo}. Add one before publishing.`);
+  }
+  return copies;
 }
-for (const m of toPublish) licenseSource(m);
+for (const m of toPublish) repoCopies(m);
 
 let count = 0;
 for (const m of toPublish) {
   writeJson(join(m.dir, "package.json"), publishManifest(m, versions), m.raw);
-  const license = licenseSource(m);
-  if (license) copyFileSync(license, join(m.dir, "LICENSE"));
+  const copies = repoCopies(m);
+  for (const file of copies) copyFileSync(join(CORE, m.repo, file), join(m.dir, file));
   const restore = () => {
     writeFileSync(join(m.dir, "package.json"), m.raw);
-    if (license) rmSync(join(m.dir, "LICENSE"), { force: true });
+    for (const file of copies) rmSync(join(m.dir, file), { force: true });
   };
   process.once("SIGINT", () => {
     restore();
     process.exit(130);
   });
+  let code: number;
   try {
-    const cmd = ["npm", "publish", ...(DRY_RUN ? ["--dry-run"] : [])];
+    // A prerelease goes to the "next" tag, so it never becomes the default install.
+    const tag = m.manifest.version.includes("-") ? ["--tag", "next"] : [];
+    const cmd = ["npm", "publish", ...tag, ...(DRY_RUN ? ["--dry-run"] : [])];
     const proc = Bun.spawn(cmd, { cwd: m.dir, stdio: ["inherit", "inherit", "inherit"] });
-    if ((await proc.exited) !== 0) fail(`npm publish failed for ${m.name}. Fix it, then run the same command again.`);
+    code = await proc.exited;
   } finally {
     restore();
     process.removeAllListeners("SIGINT");
   }
+  if (code !== 0) fail(`npm publish failed for ${m.name}. Fix it, then run the same command again.`);
   count++;
   console.log(`✓ ${m.name}@${m.manifest.version}${DRY_RUN ? " (dry run)" : ""}`);
 }
