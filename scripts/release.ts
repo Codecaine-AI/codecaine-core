@@ -22,7 +22,7 @@
  * `^<current version>` itself and restores each manifest after its publish.
  */
 
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { Glob, semver } from "bun";
 
@@ -185,10 +185,25 @@ if (!toPublish.length) {
   process.exit(0);
 }
 
+// npm ships a LICENSE only from the package folder. A package without its own
+// gets a copy of its repo's LICENSE for the publish.
+function licenseSource(m: Member): string | undefined {
+  if (existsSync(join(m.dir, "LICENSE"))) return undefined;
+  const repoLicense = join(CORE, m.repo, "LICENSE");
+  if (!existsSync(repoLicense)) fail(`${m.name} has no LICENSE, and neither does ${m.repo}. Add one before publishing.`);
+  return repoLicense;
+}
+for (const m of toPublish) licenseSource(m);
+
 let count = 0;
 for (const m of toPublish) {
   writeJson(join(m.dir, "package.json"), publishManifest(m, versions), m.raw);
-  const restore = () => writeFileSync(join(m.dir, "package.json"), m.raw);
+  const license = licenseSource(m);
+  if (license) copyFileSync(license, join(m.dir, "LICENSE"));
+  const restore = () => {
+    writeFileSync(join(m.dir, "package.json"), m.raw);
+    if (license) rmSync(join(m.dir, "LICENSE"), { force: true });
+  };
   process.once("SIGINT", () => {
     restore();
     process.exit(130);
