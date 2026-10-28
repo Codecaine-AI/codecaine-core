@@ -1,0 +1,9 @@
+{
+  "id": "ent_01M4F6XQR7CC1DD2VSDEWMMTN5",
+  "name": "Core",
+  "kind": "core",
+  "docsRoot": "docs",
+  "products": [
+    "docs"
+  ]
+}
