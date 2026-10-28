@@ -79,7 +79,7 @@ trace database read-only and proxies prompt and catalog operations to running
 harnesses. No harness depends on it. Observatory is omitted from the diagram
 because it observes the system rather than participating in it.
 
-The shared annotate-agent UX is indexed in [docs/annotate-agent-ux.md](docs/annotate-agent-ux.md).
+The shared annotate-agent UX is indexed in [docs/10-annotate-agent-ux](docs/10-annotate-agent-ux).
 
 The kernel wires agents to these surfaces. Agent definitions and rendered
 prompts come from `prompt-kit`. The kernel supplies execution, tools, spawning,

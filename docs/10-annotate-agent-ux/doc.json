@@ -1,0 +1,774 @@
+{
+  "schemaVersion": 1,
+  "id": "annotate-agent-ux",
+  "title": "Annotate-Agent UX",
+  "root": "b-annotate-agent-ux-root-34",
+  "blocks": {
+    "b-annotate-agent-ux-root-34": {
+      "id": "b-annotate-agent-ux-root-34",
+      "type": "paragraph",
+      "props": {},
+      "children": [
+        "b-annotate-agent-ux-this-is-a-core-level-poi-2",
+        "b-annotate-agent-ux-interaction-model-3",
+        "b-annotate-agent-ux-interaction-table",
+        "b-annotate-agent-ux-three-layers-5",
+        "b-annotate-agent-ux-layer-1-shared-targetin-6",
+        "b-annotate-agent-ux-codecaine-ai-annotatio-7",
+        "b-annotate-agent-ux-layers-2-3-parallel-req-8",
+        "b-annotate-agent-ux-the-request-queue-sessio-9",
+        "b-annotate-agent-ux-prompt-kit-lab-ui-10",
+        "b-annotate-agent-ux-docs-system-viewer-lab-11",
+        "b-annotate-agent-ux-they-intentionally-are-n-12",
+        "b-annotate-agent-ux-division-of-responsibili-13",
+        "b-annotate-agent-ux-layer-1-owns-only-the-in-14",
+        "b-annotate-agent-ux-target-discovery-and-eli-15",
+        "b-annotate-agent-ux-hover-and-pinned-rings-16",
+        "b-annotate-agent-ux-cmd-ctrl-drag-range-targ-17",
+        "b-annotate-agent-ux-the-anchored-composer-sh-18",
+        "b-annotate-agent-ux-each-lab-owns-what-happe-19",
+        "b-annotate-agent-ux-request-lifecycle-and-qu-20",
+        "b-annotate-agent-ux-target-identity-and-stal-21",
+        "b-annotate-agent-ux-proposal-generation-and-22",
+        "b-annotate-agent-ux-accept-reject-persistenc-23",
+        "b-annotate-agent-ux-this-boundary-keeps-the-24",
+        "b-annotate-agent-ux-where-things-live-25",
+        "b-annotate-agent-ux-where-table",
+        "b-annotate-agent-ux-reading-order-27",
+        "b-annotate-agent-ux-start-with-the-annotati-28",
+        "b-annotate-agent-ux-read-the-prompt-kit-int-29",
+        "b-annotate-agent-ux-read-the-docs-system-lab-30",
+        "b-annotate-agent-ux-use-observatory-to-inspe-31",
+        "b-annotate-agent-ux-authority-32",
+        "b-annotate-agent-ux-use-this-page-to-find-th-33"
+      ]
+    },
+    "b-annotate-agent-ux-this-is-a-core-level-poi-2": {
+      "id": "b-annotate-agent-ux-this-is-a-core-level-poi-2",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "This is a Core-level pointer page for the interaction model shared by the prompt lab and docs lab. It is not a contract: the linked implementations are authoritative."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-interaction-model-3": {
+      "id": "b-annotate-agent-ux-interaction-model-3",
+      "type": "heading",
+      "props": {
+        "level": 2
+      },
+      "text": [
+        {
+          "insert": "Interaction model"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-interaction-table": {
+      "id": "b-annotate-agent-ux-interaction-table",
+      "type": "structured-table",
+      "props": {
+        "columns": [
+          "Gesture or element",
+          "Behavior"
+        ],
+        "rows": [
+          [
+            "Annotate mode",
+            "Every annotation is an agent request. Edit affordances yield to targeting and review."
+          ],
+          [
+            "Hover",
+            "Resolve and ring the deepest eligible target."
+          ],
+          [
+            "Click",
+            "Pin the target and open the inline composer beside it."
+          ],
+          [
+            "Cmd/Ctrl+drag",
+            "Select a bounded range. Show its live dotted ring and file one request against it."
+          ],
+          [
+            "Inline composer",
+            "Enter files with the request. Choose a batch disposition for selected files or a global disposition for the request."
+          ],
+          [
+            "Request queue",
+            [
+              {
+                "insert": "Collect filed requests and use one "
+              },
+              {
+                "insert": "Apply",
+                "attributes": {
+                  "bold": true
+                }
+              },
+              {
+                "insert": " action to begin the session."
+              }
+            ]
+          ],
+          [
+            "Staged inline diff",
+            "Review staged red/green changes in context, one request at a time."
+          ],
+          [
+            "Accept / Reject",
+            "Accept from the head or reject from the tail so a review decision preserves the staged sequence."
+          ],
+          [
+            "Waiting-on-human thread",
+            "Show amber thread bars for requests awaiting a human reply. Replies continue that request."
+          ],
+          [
+            "Target fingerprint",
+            "Compare the filed target with its current fingerprint and show a “target changed since filed” chip when they differ."
+          ],
+          [
+            "Glass panel",
+            [
+              {
+                "insert": "Provide "
+              },
+              {
+                "insert": "Edit",
+                "attributes": {
+                  "bold": true
+                }
+              },
+              {
+                "insert": " and "
+              },
+              {
+                "insert": "AI",
+                "attributes": {
+                  "bold": true
+                }
+              },
+              {
+                "insert": " tabs: direct editing in one, annotation/request work in the other."
+              }
+            ]
+          ],
+          [
+            "Outline sidebar",
+            "Keep the document outline visible and scroll-spy it to the active content."
+          ]
+        ]
+      },
+      "children": []
+    },
+    "b-annotate-agent-ux-three-layers-5": {
+      "id": "b-annotate-agent-ux-three-layers-5",
+      "type": "heading",
+      "props": {
+        "level": 2
+      },
+      "text": [
+        {
+          "insert": "Three layers"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-layer-1-shared-targetin-6": {
+      "id": "b-annotate-agent-ux-layer-1-shared-targetin-6",
+      "type": "heading",
+      "props": {
+        "level": 3
+      },
+      "text": [
+        {
+          "insert": "Layer 1: shared targeting and annotate mode"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-codecaine-ai-annotatio-7": {
+      "id": "b-annotate-agent-ux-codecaine-ai-annotatio-7",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "@codecaine-ai/annotations",
+          "attributes": {
+            "code": true
+          }
+        },
+        {
+          "insert": " is the shared implementation of annotate-mode targeting. Its "
+        },
+        {
+          "insert": "“The standard annotate-mode UX” section",
+          "attributes": {
+            "reference": {
+              "kind": "source",
+              "path": "annotations/README.md",
+              "section": "the-standard-annotate-mode-ux"
+            }
+          }
+        },
+        {
+          "insert": " is the spec of record for hover, pin, range selection, and the anchored composer."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-layers-2-3-parallel-req-8": {
+      "id": "b-annotate-agent-ux-layers-2-3-parallel-req-8",
+      "type": "heading",
+      "props": {
+        "level": 3
+      },
+      "text": [
+        {
+          "insert": "Layers 2–3: parallel request and review sessions"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-the-request-queue-sessio-9": {
+      "id": "b-annotate-agent-ux-the-request-queue-sessio-9",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "The request queue/session and staged-diff review implementations are parallel:"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-prompt-kit-lab-ui-10": {
+      "id": "b-annotate-agent-ux-prompt-kit-lab-ui-10",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "Prompt Kit: "
+        },
+        {
+          "insert": "lab UI",
+          "attributes": {
+            "reference": {
+              "kind": "source",
+              "path": "prompt-kit/packages/prompt-kit/src/ui/lab"
+            }
+          }
+        },
+        {
+          "insert": ", operating over "
+        },
+        {
+          "insert": "PromptStep",
+          "attributes": {
+            "code": true
+          }
+        },
+        {
+          "insert": " values and row indexes."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-docs-system-viewer-lab-11": {
+      "id": "b-annotate-agent-ux-docs-system-viewer-lab-11",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "Docs System: "
+        },
+        {
+          "insert": "viewer lab",
+          "attributes": {
+            "reference": {
+              "kind": "source",
+              "path": "docs-system/packages/docs-viewer/src/lab"
+            }
+          }
+        },
+        {
+          "insert": " and "
+        },
+        {
+          "insert": "workbench lab",
+          "attributes": {
+            "reference": {
+              "kind": "source",
+              "path": "docs-system/packages/docs-workbench/web/src/_components/DocPage/lab"
+            }
+          }
+        },
+        {
+          "insert": ", operating over "
+        },
+        {
+          "insert": "DocOp",
+          "attributes": {
+            "code": true
+          }
+        },
+        {
+          "insert": " values and block ids."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-they-intentionally-are-n-12": {
+      "id": "b-annotate-agent-ux-they-intentionally-are-n-12",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "They intentionally are not shared. Docs System needs server-side content hashes, draft locks, a staged-proposals sidecar, and SSE. Prompt Kit does not. Share the interaction model, not the session machinery."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-division-of-responsibili-13": {
+      "id": "b-annotate-agent-ux-division-of-responsibili-13",
+      "type": "heading",
+      "props": {
+        "level": 3
+      },
+      "text": [
+        {
+          "insert": "Division of responsibility"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-layer-1-owns-only-the-in-14": {
+      "id": "b-annotate-agent-ux-layer-1-owns-only-the-in-14",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "Layer 1 owns only the interaction that turns a visible target into an agent request:"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-target-discovery-and-eli-15": {
+      "id": "b-annotate-agent-ux-target-discovery-and-eli-15",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "target discovery and eligibility;"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-hover-and-pinned-rings-16": {
+      "id": "b-annotate-agent-ux-hover-and-pinned-rings-16",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "hover and pinned rings;"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-cmd-ctrl-drag-range-targ-17": {
+      "id": "b-annotate-agent-ux-cmd-ctrl-drag-range-targ-17",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "Cmd/Ctrl+drag range targeting; and"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-the-anchored-composer-sh-18": {
+      "id": "b-annotate-agent-ux-the-anchored-composer-sh-18",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "the anchored composer shell."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-each-lab-owns-what-happe-19": {
+      "id": "b-annotate-agent-ux-each-lab-owns-what-happe-19",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "Each lab owns what happens after a request is filed:"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-request-lifecycle-and-qu-20": {
+      "id": "b-annotate-agent-ux-request-lifecycle-and-qu-20",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "request lifecycle and queue state;"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-target-identity-and-stal-21": {
+      "id": "b-annotate-agent-ux-target-identity-and-stal-21",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "target identity and staleness rules;"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-proposal-generation-and-22": {
+      "id": "b-annotate-agent-ux-proposal-generation-and-22",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "proposal generation and staged-diff state; and"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-accept-reject-persistenc-23": {
+      "id": "b-annotate-agent-ux-accept-reject-persistenc-23",
+      "type": "list-item",
+      "props": {
+        "ordered": false
+      },
+      "text": [
+        {
+          "insert": "accept/reject persistence and recovery."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-this-boundary-keeps-the-24": {
+      "id": "b-annotate-agent-ux-this-boundary-keeps-the-24",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "This boundary keeps the common user vocabulary consistent while letting each surface preserve the data model and runtime machinery it actually needs."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-where-things-live-25": {
+      "id": "b-annotate-agent-ux-where-things-live-25",
+      "type": "heading",
+      "props": {
+        "level": 2
+      },
+      "text": [
+        {
+          "insert": "Where things live"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-where-table": {
+      "id": "b-annotate-agent-ux-where-table",
+      "type": "structured-table",
+      "props": {
+        "columns": [
+          "Thing",
+          "Location",
+          "Notes"
+        ],
+        "rows": [
+          [
+            "Shared annotations package",
+            [
+              {
+                "insert": "annotations/",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            [
+              {
+                "insert": "@codecaine-ai/annotations",
+                "attributes": {
+                  "code": true
+                }
+              },
+              {
+                "insert": ", the Layer 1 targeting implementation."
+              }
+            ]
+          ],
+          [
+            "Prompt Kit lab",
+            [
+              {
+                "insert": "prompt-kit/packages/prompt-kit/src/ui/lab/",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            [
+              {
+                "insert": "Queue, session, and staged review over "
+              },
+              {
+                "insert": "PromptStep",
+                "attributes": {
+                  "code": true
+                }
+              },
+              {
+                "insert": "/row indexes."
+              }
+            ]
+          ],
+          [
+            "Docs viewer lab",
+            [
+              {
+                "insert": "docs-system/packages/docs-viewer/src/lab/",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            "Docs-facing Layer 2–3 UI."
+          ],
+          [
+            "Docs workbench lab",
+            [
+              {
+                "insert": "docs-system/packages/docs-workbench/web/src/_components/DocPage/lab/",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            "Workbench controller and projection."
+          ],
+          [
+            "Prompt Kit agent kernel",
+            [
+              {
+                "insert": "prompt-kit/packages/prompt-kit-agent/",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            [
+              {
+                "insert": "@codecaine-ai/prompt-kit-agent",
+                "attributes": {
+                  "code": true
+                }
+              },
+              {
+                "insert": ", port "
+              },
+              {
+                "insert": ":4850",
+                "attributes": {
+                  "code": true
+                }
+              },
+              {
+                "insert": "."
+              }
+            ]
+          ],
+          [
+            "Docs kernel",
+            [
+              {
+                "insert": "docs-system/packages/docs-kernel/",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            [
+              {
+                "insert": "@codecaine-ai/docs-kernel",
+                "attributes": {
+                  "code": true
+                }
+              },
+              {
+                "insert": ", port "
+              },
+              {
+                "insert": ":4840",
+                "attributes": {
+                  "code": true
+                }
+              },
+              {
+                "insert": "."
+              }
+            ]
+          ],
+          [
+            "Observatory registration",
+            [
+              {
+                "insert": "observatory/registry.example.json",
+                "attributes": {
+                  "code": true
+                }
+              }
+            ],
+            "Registers Prompt Kit and Docs System kernels for observation."
+          ]
+        ]
+      },
+      "children": []
+    },
+    "b-annotate-agent-ux-reading-order-27": {
+      "id": "b-annotate-agent-ux-reading-order-27",
+      "type": "heading",
+      "props": {
+        "level": 2
+      },
+      "text": [
+        {
+          "insert": "Reading order"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-start-with-the-annotati-28": {
+      "id": "b-annotate-agent-ux-start-with-the-annotati-28",
+      "type": "list-item",
+      "props": {
+        "ordered": true
+      },
+      "text": [
+        {
+          "insert": "Start with the "
+        },
+        {
+          "insert": "annotations UX standard",
+          "attributes": {
+            "reference": {
+              "kind": "source",
+              "path": "annotations/README.md",
+              "section": "the-standard-annotate-mode-ux"
+            }
+          }
+        },
+        {
+          "insert": " for Layer 1 behavior."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-read-the-prompt-kit-int-29": {
+      "id": "b-annotate-agent-ux-read-the-prompt-kit-int-29",
+      "type": "list-item",
+      "props": {
+        "ordered": true
+      },
+      "text": [
+        {
+          "insert": "Read the "
+        },
+        {
+          "insert": "Prompt Kit interaction model",
+          "attributes": {
+            "reference": {
+              "kind": "source",
+              "path": "prompt-kit/docs/10-system-design/60-editor/50-interaction-model/doc.json"
+            }
+          }
+        },
+        {
+          "insert": " for prompt-surface details."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-read-the-docs-system-lab-30": {
+      "id": "b-annotate-agent-ux-read-the-docs-system-lab-30",
+      "type": "list-item",
+      "props": {
+        "ordered": true
+      },
+      "text": [
+        {
+          "insert": "Read the Docs System labs for document-surface session and review details."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-use-observatory-to-inspe-31": {
+      "id": "b-annotate-agent-ux-use-observatory-to-inspe-31",
+      "type": "list-item",
+      "props": {
+        "ordered": true
+      },
+      "text": [
+        {
+          "insert": "Use Observatory to inspect the registered kernels while they run."
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-authority-32": {
+      "id": "b-annotate-agent-ux-authority-32",
+      "type": "heading",
+      "props": {
+        "level": 2
+      },
+      "text": [
+        {
+          "insert": "Authority"
+        }
+      ],
+      "children": []
+    },
+    "b-annotate-agent-ux-use-this-page-to-find-th-33": {
+      "id": "b-annotate-agent-ux-use-this-page-to-find-th-33",
+      "type": "paragraph",
+      "props": {},
+      "text": [
+        {
+          "insert": "Use this page to find the shared model quickly. For behavior, data shape, or implementation detail, follow the links above: the package and surface implementations are authoritative."
+        }
+      ],
+      "children": []
+    }
+  }
+}
