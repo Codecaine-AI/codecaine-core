@@ -33,9 +33,33 @@ bun run doctor
 - After changing any `package.json`: `bun install` at Core root, then `bun run doctor`.
 - When a dependency behaves stale: `bun run doctor` first, code second.
 
+## Releases
+
+Fifteen workspace members publish to public npm under `@codecaine-ai`. A member is public when its `package.json` has no `"private": true`. Apps outside Core install them like any npm package, and Core keeps `workspace:*` so one change can still span several packages.
+
+Each member repo has one version, shared by every package in it. To release:
+
+1. Bump the repo: `bun run release bump <repo> <patch|minor|major>`. Commit the version lines in that repo and merge them.
+2. Check: `bun run release --check`. It lists what will publish and flags published packages whose ranges no longer accept a local version. Bump those repos too.
+3. Dry run: `bun run release --dry-run`.
+4. Publish: `bun run release`. npm needs 2FA for writes, so run it in a terminal, or point `NPM_CONFIG_USERCONFIG` at a temporary npmrc that holds a granular token with bypass-2FA.
+5. Wait: npm shows a `0.0.0-stage` placeholder for a few minutes before the new version appears.
+
+The script (`scripts/release.ts`) publishes in dependency order and skips versions already on npm, so a failed run can be repeated. It also:
+
+- Rewrites `workspace:*` to `^<version>` in the published copy only, and restores each manifest after its publish.
+- Refuses a public package that depends on a private one, a `files` list that drops an entry point, and an invalid version. A prerelease publishes to the `next` tag.
+- Copies the repo `LICENSE` and `README.md` into a package that has none.
+- Uses `npm publish`, not `bun publish`, because bun resolves `workspace:*` from the member repo's stale standalone `bun.lock`.
+
+Two rules keep a published package working outside Core:
+
+- Packages ship TypeScript source. Consumers need Bun or a TypeScript-aware bundler, and an app's `tsc` type-checks that source.
+- A package that renders React lists `react` and `react-dom` in `peerDependencies`, never `dependencies`. A pinned React gives the app a second copy.
+
 ## Containers
 
-Containers mount the working tree instead of baking it into an image. There are no releases yet: the image pins bun 1.3.10 and OS dependencies only, then runs `bun install` against the mounted Core root at container start.
+Containers mount the working tree instead of baking it into an image. The image pins bun 1.3.10 and OS dependencies only, then runs `bun install` against the mounted Core root at container start.
 
 Run one service:
 
@@ -61,7 +85,7 @@ The `bun-cache` named volume keeps repeated installs fast. Overlay `node_modules
 | docs-kernel | 4840 |
 | docs-web | 4803 |
 
-This is interim infrastructure until member repos cut releases; then images can pin published versions.
+The images run live source for development. A deployed service can install the published `@codecaine-ai` versions instead; see Releases.
 
 ## Adding a New App
 
