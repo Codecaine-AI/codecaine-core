@@ -15,6 +15,7 @@
     "bootstrap": "bun scripts/bootstrap.ts",
     "doctor": "bun scripts/doctor.ts",
     "doctor:fix": "bun scripts/doctor.ts --fix",
-    "test:all": "(cd annotations && bun test) && (cd prompt-kit && bun run test) && (cd docs-system && bun run test) && (cd sequence && bun test) && (cd canvas && bun test) && (cd agent-kernel && bun run test)"
+    "test:all": "(cd annotations && bun test) && (cd prompt-kit && bun run test) && (cd docs-system && bun run test) && (cd sequence && bun test) && (cd canvas && bun test) && (cd agent-kernel && bun run test)",
+    "release": "bun scripts/release.ts"
   }
 }
