@@ -1,52 +1,48 @@
 #!/usr/bin/env bun
 /**
- * Core release: publishes every public workspace member to npm at one shared
- * version.
+ * Core release: publishes Core's public workspace members to npm.
  *
- * A member is public when its package.json has no `"private": true`. All public
- * members share one version, so a change that spans several packages ships as
- * one release, and installing one package pulls the exact versions of the
- * others.
+ * A member is public when its package.json has no `"private": true`. Each
+ * member repo has one version, shared by every package in it. Publishing
+ * sends every public package whose version is not on npm yet, in dependency
+ * order, so a change that spans several repos ships in one run.
  *
  * Usage:
- *   bun scripts/release.ts 0.2.0            # set versions, then publish
- *   bun scripts/release.ts 0.2.0 --dry-run  # set versions, then npm publish --dry-run
- *   bun scripts/release.ts --check          # list the public set and its order
+ *   bun scripts/release.ts                         # publish unpublished versions
+ *   bun scripts/release.ts --dry-run               # npm publish --dry-run instead
+ *   bun scripts/release.ts --check                 # show what would publish, and stale dependents
+ *   bun scripts/release.ts bump <repo> <level|x.y.z>  # set a repo's version (level: patch, minor, major)
  *
  * Publishing needs `npm login` with publish rights on the @codecaine-ai org.
  * With 2FA on writes, run it in a terminal so npm can prompt for each package.
  *
  * Why not `bun publish`: bun resolves `workspace:*` from the nearest
  * bun.lock, which is the member repo's standalone lockfile, not Core's. That
- * lockfile holds stale versions, so the script rewrites `workspace:*` itself.
- * Each manifest is restored after its publish. Versions already on npm are
- * skipped, so a failed run can be repeated.
+ * lockfile holds stale versions, so the script rewrites `workspace:*` to
+ * `^<current version>` itself and restores each manifest after its publish.
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { Glob } from "bun";
+import { Glob, semver } from "bun";
 
 const CORE = resolve(import.meta.dir, "..");
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
 const CHECK = args.includes("--check");
-const VERSION = args.find((a) => !a.startsWith("--"));
 const DEP_FIELDS = ["dependencies", "peerDependencies", "optionalDependencies", "devDependencies"] as const;
+const RUNTIME_FIELDS = DEP_FIELDS.filter((f) => f !== "devDependencies");
 
-type Member = { name: string; dir: string; manifest: any; raw: string };
+type Member = { name: string; repo: string; dir: string; manifest: any; raw: string };
 
 function fail(message: string): never {
   console.error(`✗ ${message}`);
   process.exit(1);
 }
 
-function indentOf(raw: string): string {
-  return raw.match(/^\{\n([ \t]+)/)?.[1] ?? "  ";
-}
-
-function writeManifest(m: Member, manifest: any) {
-  writeFileSync(join(m.dir, "package.json"), JSON.stringify(manifest, null, indentOf(m.raw)) + "\n");
+function writeJson(path: string, value: any, raw: string) {
+  const indent = raw.match(/^\{\n([ \t]+)/)?.[1] ?? "  ";
+  writeFileSync(path, JSON.stringify(value, null, indent) + "\n");
 }
 
 function workspaceMembers(): Member[] {
@@ -54,10 +50,11 @@ function workspaceMembers(): Member[] {
   const members: Member[] = [];
   for (const pattern of root.workspaces as string[]) {
     for (const file of new Glob(`${pattern}/package.json`).scanSync({ cwd: CORE, onlyFiles: true })) {
-      const dir = join(CORE, file.slice(0, -"/package.json".length));
+      const rel = file.slice(0, -"/package.json".length);
+      const dir = join(CORE, rel);
       const raw = readFileSync(join(dir, "package.json"), "utf8");
       const manifest = JSON.parse(raw);
-      members.push({ name: manifest.name, dir, manifest, raw });
+      members.push({ name: manifest.name, repo: rel.split("/")[0], dir, manifest, raw });
     }
   }
   return members;
@@ -65,8 +62,7 @@ function workspaceMembers(): Member[] {
 
 function internalDeps(m: Member, names: Set<string>): string[] {
   const deps = new Set<string>();
-  for (const field of DEP_FIELDS) {
-    if (field === "devDependencies") continue;
+  for (const field of RUNTIME_FIELDS) {
     for (const dep of Object.keys(m.manifest[field] ?? {})) if (names.has(dep)) deps.add(dep);
   }
   return [...deps];
@@ -93,17 +89,16 @@ function dependencyOrder(members: Member[], allNames: Set<string>): Member[] {
   return ordered;
 }
 
-/** Replaces every workspace: specifier on a public member with the release version. */
-function publishManifest(m: Member, version: string, publicNames: Set<string>): any {
+/** Replaces every workspace: specifier with a caret range on the dependency's current version. */
+function publishManifest(m: Member, versions: Map<string, string>): any {
   const manifest = structuredClone(m.manifest);
-  manifest.version = version;
   for (const field of DEP_FIELDS) {
     const deps = manifest[field];
     if (!deps) continue;
     for (const [dep, spec] of Object.entries(deps)) {
       if (typeof spec !== "string" || !spec.startsWith("workspace:")) continue;
       if (field === "devDependencies") delete deps[dep];
-      else if (publicNames.has(dep)) deps[dep] = version;
+      else if (versions.has(dep)) deps[dep] = `^${versions.get(dep)}`;
       else fail(`${m.name} has ${field}.${dep}: ${spec}, and ${dep} is not public`);
     }
   }
@@ -111,42 +106,88 @@ function publishManifest(m: Member, version: string, publicNames: Set<string>): 
   return manifest;
 }
 
-async function isPublished(name: string, version: string): Promise<boolean> {
-  const proc = Bun.spawn(["npm", "view", `${name}@${version}`, "version"], { stdout: "pipe", stderr: "ignore" });
-  return (await new Response(proc.stdout).text()).trim() === version;
+async function npmView(spec: string, field: string): Promise<any> {
+  const proc = Bun.spawn(["npm", "view", spec, field, "--json"], { stdout: "pipe", stderr: "ignore" });
+  const text = (await new Response(proc.stdout).text()).trim();
+  return text ? JSON.parse(text) : undefined;
+}
+
+/** Published packages whose dependency ranges no longer accept a local version. Each one needs a bump. */
+async function staleDependents(publicMembers: Member[], versions: Map<string, string>, published: Set<string>) {
+  const stale: string[] = [];
+  for (const m of publicMembers) {
+    if (!published.has(m.name)) continue;
+    const deps = (await npmView(`${m.name}@${m.manifest.version}`, "dependencies")) ?? {};
+    for (const [dep, range] of Object.entries<string>(deps)) {
+      const local = versions.get(dep);
+      if (local && !semver.satisfies(local, range)) {
+        stale.push(`${m.name}@${m.manifest.version} needs ${dep} ${range}, and ${dep} is ${local}. Bump ${m.repo}.`);
+      }
+    }
+  }
+  return stale;
+}
+
+function bump(repo: string, to: string, members: Member[]) {
+  const inRepo = members.filter((m) => m.repo === repo);
+  if (!inRepo.length) fail(`no workspace members in ${repo}`);
+  const current = inRepo.find((m) => m.manifest.private !== true)?.manifest.version ?? inRepo[0].manifest.version;
+  const [major, minor, patch] = current.split(/[.-]/).map(Number);
+  const next =
+    to === "major" ? `${major + 1}.0.0`
+    : to === "minor" ? `${major}.${minor + 1}.0`
+    : to === "patch" ? `${major}.${minor}.${patch + 1}`
+    : to;
+  if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(next)) fail(`not a semver version or level: ${to}`);
+  // Every package in the repo shares the repo's version, plus the repo root manifest when it is not a member.
+  const paths = inRepo.map((m) => join(m.dir, "package.json"));
+  const rootManifest = join(CORE, repo, "package.json");
+  if (existsSync(rootManifest) && !paths.includes(rootManifest)) paths.push(rootManifest);
+  // Edit only the version line, so the rest of each manifest keeps its formatting.
+  for (const path of paths) {
+    const raw = readFileSync(path, "utf8");
+    if (!/"version":\s*"[^"]*"/.test(raw)) fail(`${path} has no version field`);
+    writeFileSync(path, raw.replace(/"version":\s*"[^"]*"/, `"version": "${next}"`));
+  }
+  console.log(`${repo}: ${current} → ${next} in ${paths.length} manifests. Commit them in ${repo}, then run bun run release.`);
 }
 
 // ---------------------------------------------------------------------------
 
 const members = workspaceMembers();
-const allNames = new Set(members.map((m) => m.name));
-const publicMembers = dependencyOrder(members.filter((m) => m.manifest.private !== true), allNames);
-const publicNames = new Set(publicMembers.map((m) => m.name));
 
-if (CHECK || !VERSION) {
-  console.log(`${publicMembers.length} public packages, in publish order:`);
-  for (const m of publicMembers) console.log(`  ${m.name}@${m.manifest.version}  ${m.dir.slice(CORE.length + 1)}`);
-  if (!CHECK) fail("usage: bun scripts/release.ts <version> [--dry-run]");
+if (args[0] === "bump") {
+  if (!args[1] || !args[2]) fail("usage: bun scripts/release.ts bump <repo> <patch|minor|major|x.y.z>");
+  bump(args[1], args[2], members);
   process.exit(0);
 }
-if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(VERSION)) fail(`not a semver version: ${VERSION}`);
 
-// Set the shared version in every public manifest. These edits stay, so the
-// repos record the released version.
+const allNames = new Set(members.map((m) => m.name));
+const publicMembers = dependencyOrder(members.filter((m) => m.manifest.private !== true), allNames);
+const versions = new Map(publicMembers.map((m) => [m.name, m.manifest.version as string]));
+
+const published = new Set<string>();
 for (const m of publicMembers) {
-  m.manifest.version = VERSION;
-  writeManifest(m, m.manifest);
-  m.raw = readFileSync(join(m.dir, "package.json"), "utf8");
+  if ((await npmView(`${m.name}@${m.manifest.version}`, "version")) === m.manifest.version) published.add(m.name);
 }
-console.log(`Set ${publicMembers.length} manifests to ${VERSION}.`);
+const toPublish = publicMembers.filter((m) => !published.has(m.name));
+const stale = await staleDependents(publicMembers, versions, published);
 
-let published = 0;
+console.log(`${publicMembers.length} public packages, in publish order:`);
 for (const m of publicMembers) {
-  if (!DRY_RUN && (await isPublished(m.name, VERSION))) {
-    console.log(`- ${m.name}@${VERSION} is already on npm, skipped`);
-    continue;
-  }
-  writeManifest(m, publishManifest(m, VERSION, publicNames));
+  console.log(`  ${published.has(m.name) ? "on npm " : "publish"}  ${m.name}@${m.manifest.version}`);
+}
+for (const line of stale) console.log(`⚠ ${line}`);
+if (CHECK) process.exit(0);
+if (stale.length) fail("bump the repos above first, so every published range accepts the local versions");
+if (!toPublish.length) {
+  console.log("Nothing to publish. Bump a repo with: bun run release bump <repo> <patch|minor|major>");
+  process.exit(0);
+}
+
+let count = 0;
+for (const m of toPublish) {
+  writeJson(join(m.dir, "package.json"), publishManifest(m, versions), m.raw);
   const restore = () => writeFileSync(join(m.dir, "package.json"), m.raw);
   process.once("SIGINT", () => {
     restore();
@@ -160,8 +201,7 @@ for (const m of publicMembers) {
     restore();
     process.removeAllListeners("SIGINT");
   }
-  published++;
-  console.log(`✓ ${m.name}@${VERSION}${DRY_RUN ? " (dry run)" : ""}`);
+  count++;
+  console.log(`✓ ${m.name}@${m.manifest.version}${DRY_RUN ? " (dry run)" : ""}`);
 }
-
-console.log(`\n${published} published${DRY_RUN ? " (dry run)" : ""}. Commit the version bumps in each member repo.`);
+console.log(`\n${count} published${DRY_RUN ? " (dry run)" : ""}.`);

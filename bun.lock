@@ -52,7 +52,7 @@
     },
     "agent-kernel/packages/db": {
       "name": "@codecaine-ai/agent-kernel-db",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/agent-kernel-protocol": "workspace:*",
         "drizzle-orm": "^0.45.0",
@@ -63,7 +63,7 @@
     },
     "agent-kernel/packages/kernel": {
       "name": "@codecaine-ai/agent-kernel",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "bin": {
         "agent-kernel-doctor": "./src/doctor-cli.ts",
         "agent-kernel-render-prompts": "./src/render-prompts-cli.ts",
@@ -86,7 +86,7 @@
     },
     "agent-kernel/packages/protocol": {
       "name": "@codecaine-ai/agent-kernel-protocol",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "devDependencies": {
         "@types/bun": "latest",
       },
@@ -107,7 +107,7 @@
     },
     "agent-kernel/packages/viewer-core": {
       "name": "@codecaine-ai/agent-kernel-viewer-core",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/agent-kernel-protocol": "workspace:*",
         "@codecaine-ai/prompt-kit": "workspace:*",
@@ -120,7 +120,7 @@
     },
     "agent-kernel/packages/viewer-shell": {
       "name": "@codecaine-ai/agent-kernel-viewer-shell",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/agent-kernel-viewer-core": "workspace:*",
         "@codecaine-ai/agent-kernel-viewer-ui": "workspace:*",
@@ -136,7 +136,7 @@
     },
     "agent-kernel/packages/viewer-ui": {
       "name": "@codecaine-ai/agent-kernel-viewer-ui",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/agent-kernel-protocol": "workspace:*",
         "@codecaine-ai/agent-kernel-viewer-core": "workspace:*",
@@ -160,7 +160,7 @@
     },
     "annotations": {
       "name": "@codecaine-ai/annotations",
-      "version": "0.1.0",
+      "version": "0.0.1",
       "dependencies": {
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -188,7 +188,7 @@
     },
     "canvas/packages/canvas": {
       "name": "@codecaine-ai/canvas",
-      "version": "0.1.0",
+      "version": "0.0.1",
       "dependencies": {
         "@codecaine-ai/design-system": "workspace:*",
         "@codecaine-ai/text-measure": "workspace:*",
@@ -293,7 +293,7 @@
     },
     "canvas/packages/text-measure": {
       "name": "@codecaine-ai/text-measure",
-      "version": "0.1.0",
+      "version": "0.0.1",
       "dependencies": {
         "@chenglou/pretext": "0.0.9",
         "harfbuzzjs": "1.6.2",
@@ -307,7 +307,7 @@
     },
     "design-system": {
       "name": "@codecaine-ai/design-system",
-      "version": "0.1.0",
+      "version": "0.2.0",
     },
     "docs-system/packages/docs-cli": {
       "name": "@codecaine-ai/docs-cli",
@@ -329,7 +329,7 @@
     },
     "docs-system/packages/docs-index": {
       "name": "@codecaine-ai/docs-index",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/canvas": "workspace:*",
         "@codecaine-ai/docs-model": "workspace:*",
@@ -378,7 +378,7 @@
     },
     "docs-system/packages/docs-model": {
       "name": "@codecaine-ai/docs-model",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/annotations": "workspace:*",
         "@codecaine-ai/canvas": "workspace:*",
@@ -512,7 +512,7 @@
     },
     "prompt-kit/packages/prompt-kit": {
       "name": "@codecaine-ai/prompt-kit",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/annotations": "workspace:*",
         "classnames": "^2.5.1",
@@ -573,7 +573,7 @@
     },
     "prompt-kit/packages/prompt-kit-server": {
       "name": "@codecaine-ai/prompt-kit-server",
-      "version": "0.1.0",
+      "version": "0.0.2",
       "dependencies": {
         "@codecaine-ai/docs-model": "workspace:*",
         "@codecaine-ai/prompt-kit": "workspace:*",
@@ -585,7 +585,7 @@
     },
     "sequence/packages/sequence": {
       "name": "@codecaine-ai/sequence",
-      "version": "0.1.0",
+      "version": "0.0.1",
       "dependencies": {
         "@codecaine-ai/design-system": "workspace:*",
         "@codecaine-ai/text-measure": "workspace:*",
