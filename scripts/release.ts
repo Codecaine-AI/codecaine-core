@@ -185,6 +185,27 @@ if (!toPublish.length) {
   process.exit(0);
 }
 
+/** Entry points (main, types, bin, exports) that the package's `files` list leaves out of the tarball. */
+async function missingEntryPoints(m: Member): Promise<string[]> {
+  const proc = Bun.spawn(["npm", "pack", "--dry-run", "--json"], { cwd: m.dir, stdout: "pipe", stderr: "ignore" });
+  // A prepack script (design-system's build) prints to stdout before npm's JSON.
+  const out = await new Response(proc.stdout).text();
+  const json = out.slice(out.search(/^\[/m));
+  const packed: string[] = JSON.parse(json)[0].files.map((f: { path: string }) => f.path);
+  const flat = (e: unknown): string[] =>
+    typeof e === "string" ? [e] : e && typeof e === "object" ? Object.values(e).flatMap(flat) : [];
+  const { main, types, bin, exports } = m.manifest;
+  const targets = [main, types, ...flat(bin), ...flat(exports)].filter(Boolean).map((t: string) => t.replace(/^\.\//, ""));
+  const missing = targets.filter((t) =>
+    t.includes("*") ? !packed.some((f) => f.startsWith(t.split("*")[0])) : !packed.includes(t),
+  );
+  return [...new Set(missing)];
+}
+for (const m of toPublish) {
+  const missing = await missingEntryPoints(m);
+  if (missing.length) fail(`${m.name} exports files its "files" list leaves out: ${missing.join(", ")}`);
+}
+
 // npm ships a LICENSE only from the package folder. A package without its own
 // gets a copy of its repo's LICENSE for the publish.
 function licenseSource(m: Member): string | undefined {
