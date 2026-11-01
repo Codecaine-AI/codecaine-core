@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": [
     "annotations",
+    "annotations/packages/*",
     "prompt-kit/packages/*",
     "canvas/packages/*",
     "sequence/packages/*",
