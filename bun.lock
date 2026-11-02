@@ -194,12 +194,23 @@
         "react",
       ],
     },
+    "annotations/packages/action-log": {
+      "name": "@codecaine-ai/action-log",
+      "version": "0.0.1",
+    },
+    "annotations/packages/dispatcher": {
+      "name": "@codecaine-ai/dispatcher",
+      "version": "0.0.1",
+    },
     "canvas/packages/canvas": {
       "name": "@codecaine-ai/canvas",
       "version": "0.0.1",
       "dependencies": {
         "@codecaine-ai/design-system": "workspace:*",
+        "@codecaine-ai/prompt-kit": "workspace:*",
         "@codecaine-ai/text-measure": "workspace:*",
+        "@mariozechner/pi-ai": "^0.70.6",
+        "@resvg/resvg-js": "^2.6.2",
         "@sinclair/typebox": "^0.34",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -221,38 +232,6 @@
         "react-dom": "^19",
       },
     },
-    "canvas/packages/canvas-agent": {
-      "name": "@codecaine-ai/canvas-agent",
-      "version": "0.0.1",
-      "dependencies": {
-        "@codecaine-ai/agent-kernel": "workspace:*",
-        "@codecaine-ai/agent-kernel-db": "workspace:*",
-        "@codecaine-ai/agent-kernel-protocol": "workspace:*",
-        "@codecaine-ai/agent-kernel-viewer-core": "workspace:*",
-        "@codecaine-ai/agent-kernel-viewer-shell": "workspace:*",
-        "@codecaine-ai/agent-kernel-viewer-ui": "workspace:*",
-        "@codecaine-ai/canvas": "workspace:*",
-        "@codecaine-ai/design-system": "workspace:*",
-        "@codecaine-ai/prompt-kit": "workspace:*",
-        "@codecaine-ai/text-measure": "workspace:*",
-        "@mariozechner/pi-ai": "^0.70.6",
-        "@resvg/resvg-js": "^2.6.2",
-        "elysia": "^1.2.0",
-        "react": "^19",
-        "react-dom": "^19",
-      },
-      "devDependencies": {
-        "@tailwindcss/postcss": "^4",
-        "@types/bun": "latest",
-        "@types/node": "^24",
-        "@types/react": "^19",
-        "@types/react-dom": "^19",
-        "@vitejs/plugin-react": "^5.1.2",
-        "tailwindcss": "^4",
-        "typescript": "^5",
-        "vite": "^7.3.0",
-      },
-    },
     "canvas/packages/canvas-mcp": {
       "name": "@codecaine-ai/canvas-mcp",
       "version": "0.0.1",
@@ -260,7 +239,8 @@
         "codecaine-canvas": "./src/cli.ts",
       },
       "dependencies": {
-        "@codecaine-ai/canvas-agent": "workspace:*",
+        "@codecaine-ai/action-log": "workspace:*",
+        "@codecaine-ai/canvas": "workspace:*",
         "@codecaine-ai/text-measure": "workspace:*",
         "@modelcontextprotocol/sdk": "1.30.0",
       },
@@ -275,7 +255,6 @@
       "version": "0.0.1",
       "dependencies": {
         "@codecaine-ai/canvas": "workspace:*",
-        "@codecaine-ai/canvas-agent": "workspace:*",
         "@codecaine-ai/design-system": "workspace:*",
         "@codecaine-ai/text-measure": "workspace:*",
         "class-variance-authority": "^0.7.1",
@@ -315,7 +294,7 @@
     },
     "design-system": {
       "name": "@codecaine-ai/design-system",
-      "version": "0.2.0",
+      "version": "0.2.1",
     },
     "docs-system/packages/docs-cli": {
       "name": "@codecaine-ai/docs-cli",
@@ -347,22 +326,6 @@
         "typescript": "^5",
       },
     },
-    "docs-system/packages/docs-kernel": {
-      "name": "@codecaine-ai/docs-kernel",
-      "version": "0.0.2",
-      "dependencies": {
-        "@codecaine-ai/agent-kernel": "workspace:*",
-        "@codecaine-ai/agent-kernel-db": "workspace:*",
-        "@codecaine-ai/docs-model": "workspace:*",
-        "@codecaine-ai/docs-server": "workspace:*",
-        "drizzle-orm": "^0.45.0",
-        "elysia": "^1.2.0",
-      },
-      "devDependencies": {
-        "@types/bun": "latest",
-        "typescript": "^5",
-      },
-    },
     "docs-system/packages/docs-mcp": {
       "name": "@codecaine-ai/docs-mcp",
       "version": "0.0.2",
@@ -370,6 +333,7 @@
         "codecaine-docs": "./src/cli.ts",
       },
       "dependencies": {
+        "@codecaine-ai/action-log": "workspace:*",
         "@codecaine-ai/design-system": "workspace:*",
         "@codecaine-ai/docs-index": "workspace:*",
         "@codecaine-ai/docs-model": "workspace:*",
@@ -401,7 +365,7 @@
     },
     "docs-system/packages/docs-publish": {
       "name": "@codecaine-ai/docs-publish",
-      "version": "0.1.0-proof.26",
+      "version": "0.1.0-proof.28",
       "devDependencies": {
         "@codecaine-ai/design-system": "workspace:*",
       },
@@ -446,6 +410,7 @@
         "@codecaine-ai/docs-model": "workspace:*",
         "@floating-ui/react": "^0.27.19",
         "@tiptap/core": "^3.27.1",
+        "@tiptap/extension-code": "^3.27.1",
         "@tiptap/extension-italic": "^3.27.1",
         "@tiptap/extension-strike": "^3.27.1",
         "@tiptap/pm": "^3.27.1",
@@ -548,21 +513,6 @@
         "react-dom",
       ],
     },
-    "prompt-kit/packages/prompt-kit-agent": {
-      "name": "@codecaine-ai/prompt-kit-agent",
-      "version": "0.0.2",
-      "dependencies": {
-        "@codecaine-ai/agent-kernel": "workspace:*",
-        "@codecaine-ai/agent-kernel-db": "workspace:*",
-        "@codecaine-ai/prompt-kit-server": "workspace:*",
-        "drizzle-orm": "^0.45.0",
-        "elysia": "^1.2.0",
-      },
-      "devDependencies": {
-        "@types/bun": "latest",
-        "typescript": "^5",
-      },
-    },
     "prompt-kit/packages/prompt-kit-mcp": {
       "name": "@codecaine-ai/prompt-kit-mcp",
       "version": "0.0.2",
@@ -570,6 +520,7 @@
         "codecaine-prompts": "./src/cli.ts",
       },
       "dependencies": {
+        "@codecaine-ai/action-log": "workspace:*",
         "@codecaine-ai/prompt-kit": "workspace:*",
         "@codecaine-ai/prompt-kit-server": "workspace:*",
         "@modelcontextprotocol/sdk": "1.30.0",
@@ -589,6 +540,29 @@
       "devDependencies": {
         "@types/bun": "latest",
         "typescript": "^5",
+      },
+    },
+    "prompt-kit/packages/studio": {
+      "name": "@codecaine-ai/prompt-kit-studio",
+      "version": "0.0.2",
+      "dependencies": {
+        "@codecaine-ai/design-system": "workspace:*",
+        "@codecaine-ai/prompt-kit": "workspace:*",
+        "@codecaine-ai/prompt-kit-mcp": "workspace:*",
+        "@codecaine-ai/prompt-kit-server": "workspace:*",
+        "lucide-react": "^0.563.0",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+      },
+      "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@types/bun": "latest",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "@vitejs/plugin-react": "^5.1.2",
+        "tailwindcss": "^4",
+        "typescript": "^5",
+        "vite": "^7.3.0",
       },
     },
     "sequence/packages/sequence": {
@@ -749,6 +723,8 @@
 
     "@chenglou/pretext": ["@chenglou/pretext@0.0.9", "", {}, "sha512-vInlpC//3vjRfWTs78k2BBIq/0bUdpjIp8TIn9fXe0NvnChhTQZfjioVzERQQbkQvCVpPpw7PDOrTWMHpq27VA=="],
 
+    "@codecaine-ai/action-log": ["@codecaine-ai/action-log@workspace:annotations/packages/action-log"],
+
     "@codecaine-ai/agent-kernel": ["@codecaine-ai/agent-kernel@workspace:agent-kernel/packages/kernel"],
 
     "@codecaine-ai/agent-kernel-core-harness": ["@codecaine-ai/agent-kernel-core-harness@workspace:agent-kernel/packages/core-harness"],
@@ -771,19 +747,17 @@
 
     "@codecaine-ai/canvas": ["@codecaine-ai/canvas@workspace:canvas/packages/canvas"],
 
-    "@codecaine-ai/canvas-agent": ["@codecaine-ai/canvas-agent@workspace:canvas/packages/canvas-agent"],
-
     "@codecaine-ai/canvas-mcp": ["@codecaine-ai/canvas-mcp@workspace:canvas/packages/canvas-mcp"],
 
     "@codecaine-ai/design-system": ["@codecaine-ai/design-system@workspace:design-system"],
+
+    "@codecaine-ai/dispatcher": ["@codecaine-ai/dispatcher@workspace:annotations/packages/dispatcher"],
 
     "@codecaine-ai/docs-cli": ["@codecaine-ai/docs-cli@workspace:docs-system/packages/docs-cli"],
 
     "@codecaine-ai/docs-framework-skill": ["@codecaine-ai/docs-framework-skill@workspace:docs-system/packages/framework"],
 
     "@codecaine-ai/docs-index": ["@codecaine-ai/docs-index@workspace:docs-system/packages/docs-index"],
-
-    "@codecaine-ai/docs-kernel": ["@codecaine-ai/docs-kernel@workspace:docs-system/packages/docs-kernel"],
 
     "@codecaine-ai/docs-mcp": ["@codecaine-ai/docs-mcp@workspace:docs-system/packages/docs-mcp"],
 
@@ -801,11 +775,11 @@
 
     "@codecaine-ai/prompt-kit": ["@codecaine-ai/prompt-kit@workspace:prompt-kit/packages/prompt-kit"],
 
-    "@codecaine-ai/prompt-kit-agent": ["@codecaine-ai/prompt-kit-agent@workspace:prompt-kit/packages/prompt-kit-agent"],
-
     "@codecaine-ai/prompt-kit-mcp": ["@codecaine-ai/prompt-kit-mcp@workspace:prompt-kit/packages/prompt-kit-mcp"],
 
     "@codecaine-ai/prompt-kit-server": ["@codecaine-ai/prompt-kit-server@workspace:prompt-kit/packages/prompt-kit-server"],
+
+    "@codecaine-ai/prompt-kit-studio": ["@codecaine-ai/prompt-kit-studio@workspace:prompt-kit/packages/studio"],
 
     "@codecaine-ai/sequence": ["@codecaine-ai/sequence@workspace:sequence/packages/sequence"],
 
@@ -2349,21 +2323,17 @@
 
     "@babel/helper-compilation-targets/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
 
-    "@codecaine-ai/canvas-agent/@vitejs/plugin-react": ["@vitejs/plugin-react@5.2.0", "", { "dependencies": { "@babel/core": "^7.29.0", "@babel/plugin-transform-react-jsx-self": "^7.27.1", "@babel/plugin-transform-react-jsx-source": "^7.27.1", "@rolldown/pluginutils": "1.0.0-rc.3", "@types/babel__core": "^7.20.5", "react-refresh": "^0.18.0" }, "peerDependencies": { "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw=="],
-
-    "@codecaine-ai/canvas-agent/tailwindcss": ["tailwindcss@4.3.3", "", {}, "sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ=="],
-
-    "@codecaine-ai/canvas-agent/vite": ["vite@7.3.6", "", { "dependencies": { "esbuild": "^0.27.0 || ^0.28.0", "fdir": "^6.5.0", "picomatch": "^4.0.3", "postcss": "^8.5.6", "rollup": "^4.43.0", "tinyglobby": "^0.2.15" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^20.19.0 || >=22.12.0", "jiti": ">=1.21.0", "less": "^4.0.0", "lightningcss": "^1.21.0", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["@types/node", "jiti", "less", "lightningcss", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "yaml"], "bin": { "vite": "bin/vite.js" } }, "sha512-4XP60spRGjSZFf1qYH+dJIkK2znL3zQfl9KkOV9MkkRR/3Dls0dxaBsQPTloEc5BLXWPL9vsOxopxyKoMmDueg=="],
-
-    "@codecaine-ai/canvas-mcp/@types/bun": ["@types/bun@1.4.2", "", { "dependencies": { "bun-types": "1.4.2" } }, "sha512-GimotNn7+ZV0uVArItBbriZsR1oNf0+WTzPkdcFrzShI7k2norL0uzEaJT8T33dWr7O/c9ZDuAFQrctKCi72oQ=="],
-
     "@codecaine-ai/docs-workbench/@vitejs/plugin-react": ["@vitejs/plugin-react@5.2.0", "", { "dependencies": { "@babel/core": "^7.29.0", "@babel/plugin-transform-react-jsx-self": "^7.27.1", "@babel/plugin-transform-react-jsx-source": "^7.27.1", "@rolldown/pluginutils": "1.0.0-rc.3", "@types/babel__core": "^7.20.5", "react-refresh": "^0.18.0" }, "peerDependencies": { "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw=="],
 
     "@codecaine-ai/docs-workbench/tailwindcss": ["tailwindcss@4.3.3", "", {}, "sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ=="],
 
     "@codecaine-ai/docs-workbench/vite": ["vite@7.3.6", "", { "dependencies": { "esbuild": "^0.27.0 || ^0.28.0", "fdir": "^6.5.0", "picomatch": "^4.0.3", "postcss": "^8.5.6", "rollup": "^4.43.0", "tinyglobby": "^0.2.15" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^20.19.0 || >=22.12.0", "jiti": ">=1.21.0", "less": "^4.0.0", "lightningcss": "^1.21.0", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["@types/node", "jiti", "less", "lightningcss", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "yaml"], "bin": { "vite": "bin/vite.js" } }, "sha512-4XP60spRGjSZFf1qYH+dJIkK2znL3zQfl9KkOV9MkkRR/3Dls0dxaBsQPTloEc5BLXWPL9vsOxopxyKoMmDueg=="],
 
-    "@codecaine-ai/prompt-kit-mcp/@types/bun": ["@types/bun@1.4.2", "", { "dependencies": { "bun-types": "1.4.2" } }, "sha512-GimotNn7+ZV0uVArItBbriZsR1oNf0+WTzPkdcFrzShI7k2norL0uzEaJT8T33dWr7O/c9ZDuAFQrctKCi72oQ=="],
+    "@codecaine-ai/prompt-kit-studio/@vitejs/plugin-react": ["@vitejs/plugin-react@5.2.0", "", { "dependencies": { "@babel/core": "^7.29.0", "@babel/plugin-transform-react-jsx-self": "^7.27.1", "@babel/plugin-transform-react-jsx-source": "^7.27.1", "@rolldown/pluginutils": "1.0.0-rc.3", "@types/babel__core": "^7.20.5", "react-refresh": "^0.18.0" }, "peerDependencies": { "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw=="],
+
+    "@codecaine-ai/prompt-kit-studio/tailwindcss": ["tailwindcss@4.3.3", "", {}, "sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ=="],
+
+    "@codecaine-ai/prompt-kit-studio/vite": ["vite@7.3.6", "", { "dependencies": { "esbuild": "^0.27.0 || ^0.28.0", "fdir": "^6.5.0", "picomatch": "^4.0.3", "postcss": "^8.5.6", "rollup": "^4.43.0", "tinyglobby": "^0.2.15" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^20.19.0 || >=22.12.0", "jiti": ">=1.21.0", "less": "^4.0.0", "lightningcss": "^1.21.0", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["@types/node", "jiti", "less", "lightningcss", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "yaml"], "bin": { "vite": "bin/vite.js" } }, "sha512-4XP60spRGjSZFf1qYH+dJIkK2znL3zQfl9KkOV9MkkRR/3Dls0dxaBsQPTloEc5BLXWPL9vsOxopxyKoMmDueg=="],
 
     "@codecaine-ai/sequence/@sinclair/typebox": ["@sinclair/typebox@0.34.49", "", {}, "sha512-brySQQs7Jtn0joV8Xh9ZV/hZb9Ozb0pmazDIASBkYKCjXrXU3mpcFahmK/z4YDhGkQvP9mWJbVyahdtU5wQA+A=="],
 
@@ -2509,17 +2479,13 @@
 
     "@aws-crypto/util/@aws-sdk/types/@smithy/types": ["@smithy/types@4.16.1", "", { "dependencies": { "tslib": "^2.6.2" } }, "sha512-0JFs3V2y2M9tKW5na/qxe69Zv+uxLMO7QBbhxF/FHu/Gp2NFZAAL9tWl9PU02xxo07pb3G9FTyjNc6D5uZrJIg=="],
 
-    "@codecaine-ai/canvas-agent/@vitejs/plugin-react/@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
-
-    "@codecaine-ai/canvas-agent/@vitejs/plugin-react/react-refresh": ["react-refresh@0.18.0", "", {}, "sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw=="],
-
-    "@codecaine-ai/canvas-mcp/@types/bun/bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
-
     "@codecaine-ai/docs-workbench/@vitejs/plugin-react/@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
 
     "@codecaine-ai/docs-workbench/@vitejs/plugin-react/react-refresh": ["react-refresh@0.18.0", "", {}, "sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw=="],
 
-    "@codecaine-ai/prompt-kit-mcp/@types/bun/bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
+    "@codecaine-ai/prompt-kit-studio/@vitejs/plugin-react/@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
+
+    "@codecaine-ai/prompt-kit-studio/@vitejs/plugin-react/react-refresh": ["react-refresh@0.18.0", "", {}, "sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw=="],
 
     "@codecaine-ai/sequence-studio/@vitejs/plugin-react/@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
 
