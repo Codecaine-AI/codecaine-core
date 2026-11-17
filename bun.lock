@@ -565,6 +565,20 @@
         "vite": "^7.3.0",
       },
     },
+    "trace-viewer/packages/read-service": {
+      "name": "@codecaine-ai/agent-kernel-viewer-read-service",
+      "version": "0.0.7",
+      "dependencies": {
+        "@codecaine-ai/agent-kernel": "workspace:*",
+        "@codecaine-ai/agent-kernel-db": "workspace:*",
+        "@codecaine-ai/agent-kernel-viewer-core": "workspace:*",
+        "@evilmartians/agent-prism-types": "^0.0.9",
+        "elysia": "^1.2.0",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+    },
     "trace-viewer/packages/viewer-core": {
       "name": "@codecaine-ai/agent-kernel-viewer-core",
       "version": "0.0.7",
@@ -757,6 +771,8 @@
     "@codecaine-ai/agent-kernel-tui": ["@codecaine-ai/agent-kernel-tui@workspace:agent-kernel/packages/tui"],
 
     "@codecaine-ai/agent-kernel-viewer-core": ["@codecaine-ai/agent-kernel-viewer-core@workspace:trace-viewer/packages/viewer-core"],
+
+    "@codecaine-ai/agent-kernel-viewer-read-service": ["@codecaine-ai/agent-kernel-viewer-read-service@workspace:trace-viewer/packages/read-service"],
 
     "@codecaine-ai/agent-kernel-viewer-shell": ["@codecaine-ai/agent-kernel-viewer-shell@workspace:trace-viewer/packages/viewer-shell"],
 
