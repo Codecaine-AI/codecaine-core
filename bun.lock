@@ -307,7 +307,7 @@
     },
     "docs-system/packages/docs-publish": {
       "name": "@codecaine-ai/docs-publish",
-      "version": "0.1.0-proof.39",
+      "version": "0.1.0-proof.40",
       "devDependencies": {
         "@codecaine-ai/design-system": "workspace:*",
       },
