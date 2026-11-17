@@ -38,7 +38,7 @@ const IGNORES = [
   "canvas/packages/eval-suite/runner",
 ];
 
-const REPOS = ["annotations", "prompt-kit", "canvas", "sequence", "agent-kernel", "docs-system", "design-system"];
+const REPOS = ["annotations", "prompt-kit", "canvas", "sequence", "agent-kernel", "trace-viewer", "docs-system", "design-system"];
 
 /** Deliberate exceptions to the workspace:* rule. agent-kernel's repo root is
  * not a workspace member, so its devDep on prompt-kit stays a link:. */
