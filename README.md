@@ -57,9 +57,13 @@ structured long enough to compose, inspect, rewrite, and render predictably.
 
 [`agent-kernel`](https://github.com/Codecaine-AI/agent-kernel) runs agents. It
 owns runtime context, tool binding, spawning and subagent orchestration,
-concurrency, durable traces, and trace viewers. Its packages consume the
+concurrency, and durable traces. Its packages consume the
 `@codecaine-ai/prompt-kit` library as a Core workspace member. The Prompt Kit
 library package does not depend on the kernel.
+
+`trace-viewer` holds the trace viewer packages (`viewer-core`, `viewer-ui`,
+`viewer-shell`), which moved out of `agent-kernel`. They read kernel traces and
+render them. Observatory hosts them.
 
 The other three peers are document surfaces:
 
@@ -130,6 +134,7 @@ Each projection fits its medium:
 
 - [Codecaine-AI/prompt-kit](https://github.com/Codecaine-AI/prompt-kit)
 - [Codecaine-AI/agent-kernel](https://github.com/Codecaine-AI/agent-kernel)
+- [Codecaine-AI/trace-viewer](https://github.com/Codecaine-AI/trace-viewer) (private)
 - [Codecaine-AI/canvas](https://github.com/Codecaine-AI/canvas)
 - [Codecaine-AI/docs-system](https://github.com/Codecaine-AI/docs-system)
 - [Codecaine-AI/sequence](https://github.com/Codecaine-AI/sequence)
@@ -142,7 +147,7 @@ keeps its workflow and product policy.
 ## Development
 
 This checkout is a bun meta-workspace across annotations, prompt-kit (itself a
-nested workspace), canvas, sequence, agent-kernel, docs-system, and
+nested workspace), canvas, sequence, agent-kernel, trace-viewer, docs-system, and
 design-system: `bun install` at this root wires every cross-repo dependency to
 live source, and `bun run doctor` verifies the wiring.
 [`DEVELOPMENT.md`](./DEVELOPMENT.md) covers the topology, setup, daily flow,

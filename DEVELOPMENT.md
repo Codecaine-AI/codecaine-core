@@ -4,11 +4,11 @@ How to develop across the Codecaine peer repos from this umbrella checkout. Core
 
 ## Topology
 
-- `Core/package.json` is a private workspace (`codecaine-core`) with 22 members via the globs `annotations`, `prompt-kit/packages/*`, `canvas/packages/*`, `sequence/packages/*`, `agent-kernel/packages/*`, `agent-kernel/examples/*`, `docs-system/packages/*`, `design-system`.
+- `Core/package.json` is a private workspace (`codecaine-core`) with members via the globs `annotations`, `annotations/packages/*`, `prompt-kit/packages/*`, `canvas/packages/*`, `sequence/packages/*`, `agent-kernel/packages/*`, `agent-kernel/examples/*`, `trace-viewer/packages/*`, `docs-system/packages/*`, `design-system`.
 - Cross-repo dependencies are `workspace:*`. Every member resolves every other member as a symlink to live source through `Core/node_modules`.
 - `Core/bunfig.toml` pins `[install] linker = "hoisted"`.
   - Bun 1.3 defaults to the isolated linker, which leaves the root without hoisted packages.
-  - The repo-root scripts (canvas, sequence, docs-system, agent-kernel roots are not members) resolve dependencies by walking up to `Core/node_modules`, so hoisting is required.
+  - The repo-root scripts (canvas, sequence, docs-system, agent-kernel, trace-viewer roots are not members) resolve dependencies by walking up to `Core/node_modules`, so hoisting is required.
 - One React: the hoisted copy at `Core/node_modules/react` is the only real `react` directory in scope.
 - Deliberate exceptions:
   - `agent-kernel/package.json` (repo root, not a member) keeps `"@codecaine-ai/prompt-kit": "link:@codecaine-ai/prompt-kit"` as a devDep.

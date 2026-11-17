@@ -9,6 +9,7 @@
     "sequence/packages/*",
     "agent-kernel/packages/*",
     "agent-kernel/examples/*",
+    "trace-viewer/packages/*",
     "docs-system/packages/*",
     "design-system"
   ],
@@ -16,7 +17,7 @@
     "bootstrap": "bun scripts/bootstrap.ts",
     "doctor": "bun scripts/doctor.ts",
     "doctor:fix": "bun scripts/doctor.ts --fix",
-    "test:all": "(cd annotations && bun test) && (cd prompt-kit && bun run test) && (cd docs-system && bun run test) && (cd sequence && bun test) && (cd canvas && bun test) && (cd agent-kernel && bun run test)",
+    "test:all": "(cd annotations && bun test) && (cd prompt-kit && bun run test) && (cd docs-system && bun run test) && (cd sequence && bun test) && (cd canvas && bun test) && (cd agent-kernel && bun run test) && (cd trace-viewer && bun run test)",
     "release": "bun scripts/release.ts"
   }
 }
