@@ -7,5 +7,6 @@
   { "dir": "trace-viewer", "remote": "https://github.com/Codecaine-AI/trace-viewer.git" },
   { "dir": "docs-system", "remote": "https://github.com/Codecaine-AI/docs-system.git" },
   { "dir": "observatory", "remote": "https://github.com/Codecaine-AI/observatory.git" },
-  { "dir": "design-system", "remote": "https://github.com/Codecaine-AI/design-system.git" }
+  { "dir": "design-system", "remote": "https://github.com/Codecaine-AI/design-system.git" },
+  { "dir": "session-kit", "remote": "https://github.com/Codecaine-AI/session-kit.git" }
 ]
